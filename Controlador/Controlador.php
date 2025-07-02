@@ -18,21 +18,21 @@ class Controlador
         echo "<script>alert('Usuario o contraseña incorrectos');</script>";
     }
 }
-public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen)
+public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes)
 {
     $gestor = new GestorAdmin();
-    // Guardar imagen si se subió
-    $rutaImagen = "";
-    if ($imagen["tmp_name"]) {
-        $nombreArchivo = uniqid() . "_" . basename($imagen["name"]);
-        $rutaDestino = "Vista/img/" . $nombreArchivo;
-        move_uploaded_file($imagen["tmp_name"], $rutaDestino);
-        $rutaImagen = $rutaDestino;
+    $id_producto = $gestor->guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria);
+
+    // Guardar imágenes
+    foreach ($imagenes['tmp_name'] as $key => $tmp_name) {
+        if ($tmp_name) {
+            $nombreArchivo = uniqid() . "_" . basename($imagenes["name"][$key]);
+            $rutaDestino = "Vista/img/" . $nombreArchivo;
+            move_uploaded_file($tmp_name, $rutaDestino);
+            $gestor->guardarImagenProducto($id_producto, $rutaDestino);
+        }
     }
 
-    $gestor->guardarProducto($nombre, $precio, $descripcion, $id_categoria, $rutaImagen);
-
-    // Redirigir para evitar reenvío del formulario
     header("Location: index.php?accion=productos");
     exit;
 }
@@ -149,6 +149,12 @@ public function mostrarProductos()
     $offset = ($pagina - 1) * $limite;
 
     $productos = $gestor->listarProductosPaginados($limite, $offset);
+    // Agregar todas las imágenes a cada producto
+    foreach ($productos as &$producto) {
+        $producto['imagenes'] = $gestor->obtenerImagenesPorProducto($producto['id']);
+    }
+    unset($producto);
+
     $totalProductos = $gestor->contarProductos();
     $totalPaginas = ceil($totalProductos / $limite);
 
