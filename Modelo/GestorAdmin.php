@@ -147,13 +147,22 @@ class GestorAdmin
         $conexion->abrir();
 
         // Eliminar imágenes de productos asociados
-        $sql = "SELECT imagen FROM productos WHERE id_categoria = '$id'";
+        $sql = "SELECT imagen, id FROM productos WHERE id_categoria = '$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
+        $productoIds = [];
         while ($row = $result->fetch_assoc()) {
             if (!empty($row['imagen']) && file_exists($row['imagen'])) {
                 unlink($row['imagen']);
             }
+            $productoIds[] = $row['id'];
+        }
+
+        // Eliminar pedidos asociados a los productos de esta categoría
+        if (!empty($productoIds)) {
+            $ids = implode(',', $productoIds);
+            $sql = "DELETE FROM pedidos WHERE id_producto IN ($ids)";
+            $conexion->consulta($sql);
         }
 
         // Eliminar productos asociados
