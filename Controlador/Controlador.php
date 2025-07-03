@@ -219,8 +219,9 @@ class Controlador
     }
     public function mostrarCarrito()
     {
-        require 'Vista/html/carrito.php';
+        require_once 'Vista/html/carrito.php';
     }
+
     public function eliminarCarrito()
     {
         if (isset($_POST['id_producto']) && isset($_SESSION['carrito'][$_POST['id_producto']])) {

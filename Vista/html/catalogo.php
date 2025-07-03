@@ -16,11 +16,12 @@
     <header>
         <h1>Tienda de Tenis</h1>
         <nav>
+
             <a href="index.php?accion=catalogo">Catálogo</a>
             <!-- <a href="index.php?accion=loginAdmin">Zona Admin</a> -->
             <?php if (isset($_SESSION['usuario'])): ?>
                 <a href="index.php?accion=carrito">Ver carrito
-            
+
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
                     <?php endif; ?>
@@ -28,8 +29,9 @@
             <?php endif; ?>
             <?php if (isset($_SESSION['usuario']) || isset($_SESSION['admin'])): ?>
                 <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
-                   <a href="index.php?accion=pedidoscliente">Pedidos</a>
+
             <?php endif; ?>
+            <a href="index.php?accion=pedidoscliente">Pedidos</a>
             <!--<a href="index.php?accion=registroCliente">Registrarse</a>-->
         </nav>
     </header>
@@ -37,7 +39,7 @@
         <h2>Catálogo de Productos</h2>
         <form method="get" action="index.php" style="display: flex; gap: 1em; align-items: center;">
             <input type="hidden" name="accion" value="catalogo">
-             <!--<label>Mostrar
+            <!--<label>Mostrar
                 <select name="limite" onchange="this.form.submit()">
                <option value="6" <?= (isset($_GET['limite']) && $_GET['limite'] == 6) ? 'selected' : '' ?>>6</option>
                     <option value="9" <?= (isset($_GET['limite']) && $_GET['limite'] == 9) ? 'selected' : '' ?>>9</option>
@@ -65,7 +67,7 @@
                     <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
                     <p>Marca: <?= htmlspecialchars($producto['marca']) ?></p>
                     <p>Modelo: <?= htmlspecialchars($producto['modelo']) ?></p>
-                   
+
                     <p>especificaciones: <?= htmlspecialchars($producto['especificaciones']) ?></p>
                     <p>$<?= number_format($producto['precio'], 0, ',', '.') ?></p>
                     <p>Modelo: <?= htmlspecialchars($producto['id_categoria']) ?></p>
