@@ -30,4 +30,8 @@ class Conexion{
     public function obtenerFilasAfectadas(){
         return $this->filasAfectadas;
     }
+
+    public function obtenerInsertId() {
+        return $this->mySQLI->insert_id;
+    }
 }

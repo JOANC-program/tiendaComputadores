@@ -18,11 +18,23 @@ class GestorAdmin
         return false;
     }
 
-    public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $rutaImagen)
+    public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "INSERT INTO productos (nombre, precio, descripcion, id_categoria, imagen) VALUES ('$nombre', '$precio', '$descripcion', '$id_categoria', '$rutaImagen')";
+        $sql = "INSERT INTO productos (marca, modelo, tipo, especificaciones, precio, id_categoria) 
+                VALUES ('$marca', '$modelo', '$tipo', '$especificaciones', '$precio', '$id_categoria')";
+        $conexion->consulta($sql);
+        $id_producto = $conexion->obtenerInsertId();
+        $conexion->cerrar();
+        return $id_producto;
+    }
+
+    public function guardarImagenProducto($id_producto, $ruta)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "INSERT INTO imagenes_producto (id_producto, ruta_imagen) VALUES ('$id_producto', '$ruta')";
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
@@ -46,9 +58,11 @@ class GestorAdmin
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT p.*, c.nombre AS categorias FROM productos p 
-                LEFT JOIN categorias c ON p.id_categoria = c.id
-                LIMIT $limite OFFSET $offset";
+        $sql = "SELECT p.*, c.nombre AS categorias,
+                   (SELECT ruta_imagen FROM imagenes_producto i WHERE i.id_producto = p.id LIMIT 1) AS imagen
+            FROM productos p
+            LEFT JOIN categorias c ON p.id_categoria = c.id
+            LIMIT $limite OFFSET $offset";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $productos = [];
@@ -116,19 +130,24 @@ class GestorAdmin
         $conexion = new Conexion();
         $conexion->abrir();
 
-        // 1. Obtener la ruta de la imagen
-        $sql = "SELECT imagen FROM productos WHERE id = '$id' LIMIT 1";
+        // 1. Obtener todas las rutas de imágenes asociadas
+        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
-        $row = $result->fetch_assoc();
-        if ($row && !empty($row['imagen']) && file_exists($row['imagen'])) {
-            // 2. Eliminar el archivo físico
-            unlink($row['imagen']);
+        while ($row = $result->fetch_assoc()) {
+            if (!empty($row['ruta_imagen']) && file_exists($row['ruta_imagen'])) {
+                unlink($row['ruta_imagen']);
+            }
         }
 
-        // 3. Eliminar el registro de la base de datos
+        // 2. Eliminar registros de imágenes asociadas
+        $sql = "DELETE FROM imagenes_producto WHERE id_producto = '$id'";
+        $conexion->consulta($sql);
+
+        // 3. Eliminar el producto
         $sql = "DELETE FROM productos WHERE id = '$id'";
         $conexion->consulta($sql);
+
         $conexion->cerrar();
     }
 
@@ -265,6 +284,20 @@ class GestorAdmin
         $sql = "UPDATE categorias SET nombre='$nombre' WHERE id='$id'";
         $conexion->consulta($sql);
         $conexion->cerrar();
+    }
+    public function obtenerImagenesPorProducto($id_producto)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $imagenes = [];
+        while ($row = $result->fetch_assoc()) {
+            $imagenes[] = $row['ruta_imagen'];
+        }
+        $conexion->cerrar();
+        return $imagenes;
     }
 }
 ?>

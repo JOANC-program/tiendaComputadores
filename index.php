@@ -27,12 +27,14 @@ if (isset($_GET['accion'])) {
         $contrasena = $_POST["contrasena"];
         $Controlador->loginAdmin($correo, $contrasena);
     } elseif ($_GET["accion"] == "guardarProducto") {
-        $nombre = $_POST["nombre"];
+        $marca = $_POST["marca"];
+        $modelo = $_POST["modelo"];
+        $tipo = $_POST["tipo"];
+        $especificaciones = $_POST["especificaciones"];
         $precio = $_POST["precio"];
-        $descripcion = $_POST["descripcion"];
         $id_categoria = $_POST["id_categoria"];
-        $imagen = $_FILES["imagen"];
-        $Controlador->guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen);
+        $imagenes = $_FILES["imagenes"];
+        $Controlador->guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes);
     } elseif ($_GET["accion"] == "editarProducto" && isset($_GET["id"])) {
         $id = $_GET["id"];
         $Controlador->editarProducto($id);

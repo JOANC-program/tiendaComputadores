@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,9 +10,14 @@
     <h2>Editar Producto</h2>
     <form action="index.php?accion=actualizarProducto" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= htmlspecialchars($producto['id']) ?>">
-        <input type="text" name="nombre" value="<?= htmlspecialchars($producto['nombre']) ?>" required>
+        <input type="text" name="marca" value="<?= htmlspecialchars($producto['marca']) ?>" required>
+        <input type="text" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>" required>
+        <select name="tipo" required>
+            <option value="Computador" <?= $producto['tipo'] == 'Computador' ? 'selected' : '' ?>>Computador</option>
+            <option value="Repuesto" <?= $producto['tipo'] == 'Repuesto' ? 'selected' : '' ?>>Repuesto</option>
+        </select>
+        <textarea name="especificaciones" required><?= htmlspecialchars($producto['especificaciones']) ?></textarea>
         <input type="number" name="precio" value="<?= htmlspecialchars($producto['precio']) ?>" required>
-        <input type="text" name="descripcion" value="<?= htmlspecialchars($producto['descripcion']) ?>" required>
         <select name="id_categoria" required>
             <?php foreach ($categorias as $cat): ?>
                 <option value="<?= $cat['id'] ?>" <?= $cat['id'] == $producto['id_categoria'] ? 'selected' : '' ?>>
@@ -19,7 +25,15 @@
                 </option>
             <?php endforeach; ?>
         </select>
-        <input type="file" name="imagen">
+        <p>Imágenes actuales:</p>
+        <?php
+        $imagenes = (new GestorAdmin())->obtenerImagenesPorProducto($producto['id']);
+        foreach ($imagenes as $img): ?>
+            <img src="<?= htmlspecialchars($img) ?>" style="width:50px;height:50px;object-fit:cover;margin:2px;">
+        <?php endforeach; ?>
+        <br>
+        <label>Agregar nuevas imágenes:</label>
+        <input type="file" name="imagenes[]" multiple>
         <button type="submit">Actualizar Producto</button>
     </form>
     <a href="index.php?accion=productos">Volver</a>
