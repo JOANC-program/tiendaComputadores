@@ -33,7 +33,7 @@ if (isset($_GET['accion'])) {
     if ($_GET["accion"] == "ingresar") {
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
-        $Controlador->loginAdmin($correo, $contrasena);
+        $Controlador->ingresar($correo, $contrasena);
     } 
     /*elseif ($_GET["accion"] == "guardarProducto") {
         $marca = $_POST["marca"];

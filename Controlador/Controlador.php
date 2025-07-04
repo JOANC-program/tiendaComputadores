@@ -5,7 +5,8 @@ class Controlador
     {
         require_once $ruta;
     }
-    public function loginAdmin($correo, $contrasena)
+  
+    /* public function loginAdmin($correo, $contrasena)
 {
     $gestor = new GestorAdmin();
     $existe = $gestor->verificarAdmin($correo, $contrasena);
@@ -17,7 +18,27 @@ class Controlador
         $this->verpagina('Vista/html/loginAdmin.html');
         echo "<script>alert('Usuario o contraseña incorrectos');</script>";
     }
-}
+}*/
+public function ingresar($correo, $contrasena)
+    {
+        $gestor = new GestorAdmin();
+        $admin = $gestor->verificarAdmin($correo, $contrasena);
+        if ($admin) {
+            $_SESSION['admin'] = $correo;
+            header('Location: index.php?accion=productos'); // Página de administración
+            exit;
+        }
+
+        $existe = $gestor->ingresar($correo, $contrasena);
+        if ($existe) {
+            $_SESSION['usuario'] = $correo;
+            header('Location: index.php?accion=catalogo'); // Página de catálogo para clientes
+            exit;
+        } else {
+            echo "<script>alert('Usuario o contraseña incorrectos');window.location='index.php?accion=login';</script>";
+            exit;
+        }
+    }
 /*public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen)
 {
     $gestor = new GestorAdmin();
