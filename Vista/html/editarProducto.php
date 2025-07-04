@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,12 +27,9 @@
         </select>
         <p>Imágenes actuales:</p>
         <?php
+        $imagenes = (new GestorAdmin())->obtenerImagenesPorProducto($producto['id']);
         foreach ($imagenes as $img): ?>
-            <div style="display:inline-block;text-align:center;">
-                <img src="<?= htmlspecialchars($img['ruta_imagen']) ?>" style="width:50px;height:50px;object-fit:cover;margin:2px;">
-                <br>
-                <a href="index.php?accion=eliminarImagen&id_img=<?= $img['id'] ?>&id_producto=<?= $producto['id'] ?>" onclick="return confirm('¿Eliminar esta imagen?');">Eliminar</a>
-            </div>
+            <img src="<?= htmlspecialchars($img) ?>" style="width:50px;height:50px;object-fit:cover;margin:2px;">
         <?php endforeach; ?>
         <br>
         <label>Agregar nuevas imágenes:</label>

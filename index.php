@@ -40,14 +40,12 @@ if (isset($_GET['accion'])) {
         $Controlador->editarProducto($id);
     } elseif ($_GET["accion"] == "actualizarProducto") {
         $id = $_POST["id"];
-        $marca = $_POST["marca"];
-        $modelo = $_POST["modelo"];
-        $tipo = $_POST["tipo"];
-        $especificaciones = $_POST["especificaciones"];
+        $nombre = $_POST["nombre"];
         $precio = $_POST["precio"];
+        $descripcion = $_POST["descripcion"];
         $id_categoria = $_POST["id_categoria"];
-        $imagenes = $_FILES["imagenes"];
-        $Controlador->actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes);
+        $imagen = $_FILES["imagen"];
+        $Controlador->actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen);
     } elseif ($_GET["accion"] == "eliminarProducto" && isset($_GET["id"])) {
         $id = $_GET["id"];
         $Controlador->eliminarProducto($id);

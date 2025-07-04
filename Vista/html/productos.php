@@ -75,7 +75,7 @@
                             <td>
                                 <?php if (!empty($producto['imagenes'])): ?>
                                     <?php foreach ($producto['imagenes'] as $img): ?>
-                                        <img src="<?= htmlspecialchars($img['ruta_imagen']) ?>" alt="Imagen" style="width:50px;height:50px;object-fit:cover;margin:2px;">
+                                        <img src="<?= htmlspecialchars($img) ?>" alt="Imagen" style="width:50px;height:50px;object-fit:cover;margin:2px;">
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <span>Sin imagen</span>

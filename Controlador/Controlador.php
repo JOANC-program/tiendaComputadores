@@ -41,26 +41,21 @@ public function editarProducto($id)
     $gestor = new GestorAdmin();
     $producto = $gestor->obtenerProductoPorId($id);
     $categorias = $gestor->listarCategorias();
-    $imagenes = $gestor->obtenerImagenesPorProducto($id);
     require "Vista/html/editarProducto.php";
 }
-public function actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes)
+public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen)
 {
     $gestor = new GestorAdmin();
-    $gestor->actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria);
-
-    // Guardar nuevas imágenes si se subieron
-    if (!empty($imagenes['tmp_name'][0])) {
-        foreach ($imagenes['tmp_name'] as $key => $tmp_name) {
-            if ($tmp_name) {
-                $nombreArchivo = uniqid() . "_" . basename($imagenes["name"][$key]);
-                $rutaDestino = "Vista/img/" . $nombreArchivo;
-                move_uploaded_file($tmp_name, $rutaDestino);
-                $gestor->guardarImagenProducto($id, $rutaDestino);
-            }
-        }
+    // Procesar imagen solo si se subió una nueva
+    $rutaImagen = null;
+    if ($imagen["tmp_name"]) {
+        $nombreArchivo = uniqid() . "_" . basename($imagen["name"]);
+        $rutaDestino = "Vista/img/" . $nombreArchivo;
+        move_uploaded_file($imagen["tmp_name"], $rutaDestino);
+        $rutaImagen = $rutaDestino;
     }
-
+    $gestor->actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $rutaImagen);
+    // Redirigir para evitar reenvío del formulario
     header("Location: index.php?accion=productos");
     exit;
 }
