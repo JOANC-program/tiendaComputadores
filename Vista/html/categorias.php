@@ -15,7 +15,7 @@
             <a href="index.php?accion=productos">Productos</a>
             <a href="index.php?accion=categorias">Categorías</a>
             <a href="index.php?accion=pedidos">Pedidos</a>
-            <?php if (isset($_SESSION['admin'])): ?>
+            <?php if (isset($_SESSION['usuario']) || isset($_SESSION['admin'])): ?>
                 <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
             <?php endif; ?>
         </nav>
@@ -42,5 +42,8 @@
         </ul>
     </section>
 </body>
+<footer>
+    <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
+  </footer>
 
 </html>
