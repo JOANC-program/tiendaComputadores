@@ -115,14 +115,14 @@ if (isset($_GET['accion'])) {
         $id = $_POST["id"];
         $nombre = $_POST["nombre_categoria"];
         $Controlador->actualizarCategoria($id, $nombre);
-
+    }
         if ($_GET["accion"] == "carrito") {
             $Controlador->mostrarCarrito();
         }
         if ($_GET["accion"] == "agregarCarrito") {
             $Controlador->agregarCarrito();
         }
-        if ($_GET["accion"] == "formularioPedido") {
+        if ($_GET["accion"] == "finalizarPedido") {
             $Controlador->finalizarPedido();
         }
 
@@ -132,7 +132,7 @@ if (isset($_GET['accion'])) {
         /* else {
         $Controlador->verpagina('Vista/html/error.html');
     }*/
-    }
+    
 } else {
     $Controlador->verpagina('Vista/html/login.php');
 }
