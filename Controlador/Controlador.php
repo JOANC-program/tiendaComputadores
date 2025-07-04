@@ -187,4 +187,11 @@ public function eliminarImagenProducto($id_img, $id_producto)
     header("Location: index.php?accion=editarProducto&id=$id_producto");
     exit;
 }
+public function mostrarDashboard()
+{
+    $gestor = new GestorAdmin();
+    $pedidosPorMes = $gestor->pedidosPorMes();
+    $masVendidos = $gestor->productosMasVendidos();
+    require "Vista/html/dashboard.php";
+}
 }

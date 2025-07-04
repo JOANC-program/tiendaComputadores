@@ -96,6 +96,8 @@ if (isset($_GET['accion'])) {
         $id_img = $_GET["id_img"];
         $id_producto = $_GET["id_producto"];
         $Controlador->eliminarImagenProducto($id_img, $id_producto);
+    } elseif ($_GET["accion"] == "dashboard") {
+        $Controlador->mostrarDashboard();
     } else {
         $Controlador->verpagina('Vista/html/error.html');
 

@@ -332,5 +332,48 @@ class GestorAdmin
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
+
+    // Pedidos por mes (últimos 12 meses)
+    public function pedidosPorMes() {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT DATE_FORMAT(fecha, '%Y-%m') as mes, COUNT(*) as cantidad
+                FROM pedidos
+                GROUP BY mes
+                ORDER BY mes DESC
+                LIMIT 12";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $labels = [];
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['mes'];
+            $data[] = $row['cantidad'];
+        }
+        $conexion->cerrar();
+        return ['labels' => array_reverse($labels), 'data' => array_reverse($data)];
+    }
+
+    // Productos más vendidos (top 5)
+    public function productosMasVendidos() {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT CONCAT(marca, ' ', modelo) as producto, SUM(cantidad) as total
+                FROM pedidos
+                JOIN productos ON pedidos.id_producto = productos.id
+                GROUP BY producto
+                ORDER BY total DESC
+                LIMIT 5";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $labels = [];
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['producto'];
+            $data[] = $row['total'];
+        }
+        $conexion->cerrar();
+        return ['labels' => $labels, 'data' => $data];
+    }
 }
 ?>

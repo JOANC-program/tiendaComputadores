@@ -15,6 +15,7 @@
             <a href="index.php?accion=productos">Productos</a>
             <a href="index.php?accion=categorias">Categorías</a>
             <a href="index.php?accion=pedidos">Pedidos</a>
+            <a href="index.php?accion=dashboard">Dashboard</a>
             <?php if (isset($_SESSION['admin'])): ?>
                 <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
             <?php endif; ?>
