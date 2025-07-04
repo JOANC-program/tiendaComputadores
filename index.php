@@ -34,7 +34,8 @@ if (isset($_GET['accion'])) {
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
         $Controlador->loginAdmin($correo, $contrasena);
-    } /*elseif ($_GET["accion"] == "guardarProducto") {
+    } 
+    /*elseif ($_GET["accion"] == "guardarProducto") {
         $marca = $_POST["marca"];
         $modelo = $_POST["modelo"];
         $tipo = $_POST["tipo"];
