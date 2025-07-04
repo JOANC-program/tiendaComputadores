@@ -112,15 +112,18 @@ class GestorAdmin
         return $producto;
     }
 
-    public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $rutaImagen = null)
+    public function actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        if ($rutaImagen) {
-            $sql = "UPDATE productos SET nombre='$nombre', precio='$precio', descripcion='$descripcion', id_categoria='$id_categoria', imagen='$rutaImagen' WHERE id='$id'";
-        } else {
-            $sql = "UPDATE productos SET nombre='$nombre', precio='$precio', descripcion='$descripcion', id_categoria='$id_categoria' WHERE id='$id'";
-        }
+        $sql = "UPDATE productos SET 
+                marca='$marca', 
+                modelo='$modelo', 
+                tipo='$tipo', 
+                especificaciones='$especificaciones', 
+                precio='$precio', 
+                id_categoria='$id_categoria'
+            WHERE id='$id'";
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
@@ -166,19 +169,30 @@ class GestorAdmin
         $conexion->abrir();
 
         // Eliminar imágenes de productos asociados
-        $sql = "SELECT imagen, id FROM productos WHERE id_categoria = '$id'";
+        $sql = "SELECT id FROM productos WHERE id_categoria = '$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $productoIds = [];
         while ($row = $result->fetch_assoc()) {
-            if (!empty($row['imagen']) && file_exists($row['imagen'])) {
-                unlink($row['imagen']);
-            }
             $productoIds[] = $row['id'];
         }
 
-        // Eliminar pedidos asociados a los productos de esta categoría
+        // Eliminar imágenes físicas y registros de imágenes asociadas
         if (!empty($productoIds)) {
+            foreach ($productoIds as $prodId) {
+                // Eliminar imágenes físicas y registros
+                $sqlImgs = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$prodId'";
+                $conexion->consulta($sqlImgs);
+                $resImgs = $conexion->obtenerResult();
+                while ($imgRow = $resImgs->fetch_assoc()) {
+                    if (!empty($imgRow['ruta_imagen']) && file_exists($imgRow['ruta_imagen'])) {
+                        unlink($imgRow['ruta_imagen']);
+                    }
+                }
+                $sqlDelImgs = "DELETE FROM imagenes_producto WHERE id_producto = '$prodId'";
+                $conexion->consulta($sqlDelImgs);
+            }
+            // Eliminar pedidos asociados a los productos de esta categoría
             $ids = implode(',', $productoIds);
             $sql = "DELETE FROM pedidos WHERE id_producto IN ($ids)";
             $conexion->consulta($sql);
@@ -199,11 +213,13 @@ class GestorAdmin
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT p.id, u.correo AS usuario, pr.nombre AS producto, p.cantidad, p.fecha, p.estado
-                FROM pedidos p
-                LEFT JOIN usuarios u ON p.id_usuario = u.id
-                LEFT JOIN productos pr ON p.id_producto = pr.id
-                ORDER BY p.fecha DESC";
+        $sql = "SELECT p.id, u.correo AS usuario, 
+                   CONCAT(pr.marca, ' ', pr.modelo) AS producto, 
+                   p.cantidad, p.fecha, p.estado
+            FROM pedidos p
+            LEFT JOIN usuarios u ON p.id_usuario = u.id
+            LEFT JOIN productos pr ON p.id_producto = pr.id
+            ORDER BY p.fecha DESC";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $pedidos = [];
@@ -289,15 +305,32 @@ class GestorAdmin
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
+        $sql = "SELECT id, ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $imagenes = [];
         while ($row = $result->fetch_assoc()) {
-            $imagenes[] = $row['ruta_imagen'];
+            $imagenes[] = $row;
         }
         $conexion->cerrar();
         return $imagenes;
+    }
+    public function eliminarImagenProducto($id_img)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        // Obtener la ruta de la imagen
+        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id = '$id_img' LIMIT 1";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $row = $result->fetch_assoc();
+        if ($row && !empty($row['ruta_imagen']) && file_exists($row['ruta_imagen'])) {
+            unlink($row['ruta_imagen']);
+        }
+        // Eliminar el registro de la base de datos
+        $sql = "DELETE FROM imagenes_producto WHERE id = '$id_img'";
+        $conexion->consulta($sql);
+        $conexion->cerrar();
     }
 }
 ?>

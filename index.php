@@ -40,12 +40,14 @@ if (isset($_GET['accion'])) {
         $Controlador->editarProducto($id);
     } elseif ($_GET["accion"] == "actualizarProducto") {
         $id = $_POST["id"];
-        $nombre = $_POST["nombre"];
+        $marca = $_POST["marca"];
+        $modelo = $_POST["modelo"];
+        $tipo = $_POST["tipo"];
+        $especificaciones = $_POST["especificaciones"];
         $precio = $_POST["precio"];
-        $descripcion = $_POST["descripcion"];
         $id_categoria = $_POST["id_categoria"];
-        $imagen = $_FILES["imagen"];
-        $Controlador->actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen);
+        $imagenes = $_FILES["imagenes"];
+        $Controlador->actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes);
     } elseif ($_GET["accion"] == "eliminarProducto" && isset($_GET["id"])) {
         $id = $_GET["id"];
         $Controlador->eliminarProducto($id);
@@ -90,6 +92,10 @@ if (isset($_GET['accion'])) {
         $id = $_POST["id"];
         $nombre = $_POST["nombre_categoria"];
         $Controlador->actualizarCategoria($id, $nombre);
+    } elseif ($_GET["accion"] == "eliminarImagen" && isset($_GET["id_img"]) && isset($_GET["id_producto"])) {
+        $id_img = $_GET["id_img"];
+        $id_producto = $_GET["id_producto"];
+        $Controlador->eliminarImagenProducto($id_img, $id_producto);
     } else {
         $Controlador->verpagina('Vista/html/error.html');
 
