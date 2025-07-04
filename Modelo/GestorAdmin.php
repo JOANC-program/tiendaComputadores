@@ -11,30 +11,14 @@ class GestorAdmin
         $usuario = $result->fetch_assoc();
         $conexion->cerrar();
 
-        // Verifica la contraseña hasheada y el rol admin
-        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'admin') {
-            return true;
-        }
-        return false;
-    }
-    public function ingresar($correo, $contrasena)
-    {
-        $conexion = new Conexion();
-        $conexion->abrir();
-        $sql = "SELECT * FROM usuarios WHERE correo='$correo' LIMIT 1";
-        $conexion->consulta($sql);
-        $result = $conexion->obtenerResult();
-        $usuario = $result->fetch_assoc();
-        $conexion->cerrar();
-
-        // Verifica la contraseña hasheada y el rol cliente
-        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'cliente') {
+        // Verifica la contraseña hasheada
+        if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
             return true;
         }
         return false;
     }
 
-    public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria,)
+    public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
@@ -257,8 +241,7 @@ class GestorAdmin
         $conexion = new Conexion();
         $conexion->abrir();
         $hash = password_hash($contrasena, PASSWORD_DEFAULT);
-        // Guardar siempre como cliente
-        $sql = "INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES ('$nombre', '$correo', '$hash', 'cliente')";
+        $sql = "INSERT INTO usuarios (nombre, correo, contrasena) VALUES ('$nombre', '$correo', '$hash')";
         $conexion->consulta($sql);
         $conexion->cerrar();
     }

@@ -94,9 +94,9 @@
 
     </section>
 
-   <footer>
-    <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
-  </footer>
+    <footer>
+        <p>&copy; 2025 Tienda de Tenis. Todos los derechos reservados.</p>
+    </footer>
 </body>
 
 </html>

@@ -19,7 +19,4 @@
     </form>
     <a href="index.php?accion=catalogo">Volver al catálogo</a>
 </body>
-<footer>
-    <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
-  </footer>
 </html>

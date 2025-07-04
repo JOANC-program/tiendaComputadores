@@ -64,8 +64,5 @@
         </table>
     </section>
 </body>
-<footer>
-    <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
-  </footer>
 
 </html>
