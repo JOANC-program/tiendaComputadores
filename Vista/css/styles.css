@@ -94,6 +94,7 @@ footer {
 }
 
 
+<<<<<<< Updated upstream
 .container {
     background-color: #fff;
     padding: 30px;
@@ -104,6 +105,8 @@ footer {
     position: relative;
     overflow: hidden;
 }
+=======
+>>>>>>> Stashed changes
 
 .form-box {
     padding: 20px;
@@ -199,3 +202,43 @@ button[type="submit"]:hover {
 .switch-form a:hover {
     text-decoration: underline;
 }
+<<<<<<< Updated upstream
+=======
+
+/* Estilos específicos para la página de login 
+
+
+si afecta en algo esto estilos los cambia o borra o me avisa*/
+
+.login-body {
+    min-height: 100vh; /* Asegura que el body ocupe todo el alto de la ventana */
+    display: flex; /* Habilita Flexbox solo para esta página */
+    justify-content: center; /* Centra el contenido de .login-body horizontalmente */
+    align-items: center; /* Centra el contenido de .login-body verticalmente */
+    /* Si tenías un padding aquí que desplazara el contenido, quítalo. */
+    padding: 0; /* Asegurarse de que no haya padding que lo desplace */
+}
+
+/* Tu .container como lo tienes ya está bien: */
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    /* No necesitas margin: auto si el padre lo está centrando con flexbox */
+}
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+>>>>>>> Stashed changes

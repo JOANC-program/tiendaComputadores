@@ -13,8 +13,8 @@
         <nav>
             <a href="index.php?accion=catalogo">Catálogo</a>
             <a href="index.php?accion=carrito">Carrito</a>
-            <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
             <a href="index.php?accion=pedidoscliente">Pedidos</a>
+            <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
 
         </nav>
     </header>
@@ -60,8 +60,12 @@
         <?php endif; ?>
     </section>
 </body>
+<<<<<<< Updated upstream
 <footer>
     <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
   </footer>
+=======
+
+>>>>>>> Stashed changes
 
 </html>

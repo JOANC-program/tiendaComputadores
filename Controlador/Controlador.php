@@ -5,11 +5,27 @@ class Controlador
     {
         require_once $ruta;
     }
+
+    /* public function loginAdmin($correo, $contrasena)
+{
+    $gestor = new GestorAdmin();
+    $existe = $gestor->verificarAdmin($correo, $contrasena);
+    if ($existe) {
+        $_SESSION['admin'] = $correo; 
+        header('Location: index.php?accion=productos');
+        exit;
+    } else {
+        $this->verpagina('Vista/html/loginAdmin.html');
+        echo "<script>alert('Usuario o contraseña incorrectos');</script>";
+    }
+
     
-   
-    
+}*/
+
     public function ingresar($correo, $contrasena)
     {
+         unset($_SESSION['admin']);
+        unset($_SESSION['cliente']);
         $gestor = new GestorAdmin();
         $admin = $gestor->verificarAdmin($correo, $contrasena);
         if ($admin) {
@@ -20,7 +36,7 @@ class Controlador
 
         $existe = $gestor->ingresar($correo, $contrasena);
         if ($existe) {
-            $_SESSION['usuario'] = $correo;
+            $_SESSION['cliente'] = $correo;
             header('Location: index.php?accion=catalogo'); // Página de catálogo para clientes
             exit;
         } else {
@@ -28,6 +44,67 @@ class Controlador
             exit;
         }
     }
+    public function mostrarCarrito()
+    {
+        require_once 'Vista/html/carrito.php';
+    }
+    public function agregarCarrito()
+    {
+        if (!isset($_SESSION['cliente'])) {
+            header('Location: index.php?accion=login');
+            exit;
+        }
+        $id_producto = $_POST['id_producto'];
+        $gestor = new GestorAdmin();
+        $producto = $gestor->obtenerProductoPorId($id_producto);
+        if (!$producto) {
+            header('Location: index.php?accion=catalogo');
+            exit;
+        }
+        // Obtener nombre de la categoría
+        $categoria = '';
+        if (!empty($producto['id_categoria'])) {
+            $cat = $gestor->obtenerCategoriaPorId($producto['id_categoria']);
+            $categoria = $cat ? $cat['nombre'] : '';
+        }
+        // Inicializar carrito si no existe
+        if (!isset($_SESSION['carrito'])) {
+            $_SESSION['carrito'] = [];
+        }
+        // Si ya está en el carrito, sumar cantidad
+        if (isset($_SESSION['carrito'][$id_producto])) {
+            $_SESSION['carrito'][$id_producto]['cantidad']++;
+        } else {
+            $_SESSION['carrito'][$id_producto] = [
+                'id' => $producto['id'],
+                'nombre' => $producto['nombre'],
+                'categoria' => $categoria,
+                'precio' => $producto['precio'],
+                'cantidad' => 1
+            ];
+        }
+        header('Location: index.php?accion=carrito');
+        exit;
+    }
+    public function finalizarPedido()
+    {
+        if (!isset($_SESSION['cliente']) || empty($_SESSION['carrito'])) {
+            header('Location: index.php?accion=carrito');
+            exit;
+        }
+        $gestor = new GestorAdmin();
+        $usuario = $gestor->obtenerUsuarioPorCorreo($_SESSION['cliente']);
+        $id_usuario = $usuario ? $usuario['id'] : null;
+        $fecha = date('Y-m-d');
+        $estado = 'Pendiente';
+        foreach ($_SESSION['carrito'] as $item) {
+            $gestor->guardarPedido($id_usuario, $item['id'], $item['cantidad'], $fecha, $estado);
+        }
+        unset($_SESSION['carrito']);
+        header('Location: index.php?accion=catalogo&mensaje=pedido_ok');
+        exit;
+    }
+
     public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen)
     {
         $gestor = new GestorAdmin();
@@ -51,9 +128,10 @@ class Controlador
         $gestor = new GestorAdmin();
         $producto = $gestor->obtenerProductoPorId($id);
         $categorias = $gestor->listarCategorias();
+        $imagenes = $gestor->obtenerImagenesPorProducto($id);
         require "Vista/html/editarProducto.php";
     }
-    public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen)
+ public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen)
     {
         $gestor = new GestorAdmin();
         // Procesar imagen solo si se subió una nueva
@@ -123,6 +201,7 @@ class Controlador
         echo "<script>alert('Registro exitoso, ahora puede solicitar pedidos');window.location='index.php?accion=catalogo';</script>";
         exit;
     }
+
     public function mostrarCatalogo()
     {
         $gestor = new GestorCatalogo();
@@ -159,6 +238,12 @@ class Controlador
         $offset = ($pagina - 1) * $limite;
 
         $productos = $gestor->listarProductosPaginados($limite, $offset);
+        // Agregar todas las imágenes a cada producto
+        foreach ($productos as &$producto) {
+            $producto['imagenes'] = $gestor->obtenerImagenesPorProducto($producto['id']);
+        }
+        unset($producto);
+
         $totalProductos = $gestor->contarProductos();
         $totalPaginas = ceil($totalProductos / $limite);
 
@@ -179,74 +264,18 @@ class Controlador
         header("Location: index.php?accion=categorias");
         exit;
     }
-    public function agregarCarrito()
+    public function eliminarImagenProducto($id_img, $id_producto)
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: index.php?accion=login');
-            exit;
-        }
-        $id_producto = $_POST['id_producto'];
         $gestor = new GestorAdmin();
-        $producto = $gestor->obtenerProductoPorId($id_producto);
-        if (!$producto) {
-            header('Location: index.php?accion=catalogo');
-            exit;
-        }
-        // Obtener nombre de la categoría
-        $categoria = '';
-        if (!empty($producto['id_categoria'])) {
-            $cat = $gestor->obtenerCategoriaPorId($producto['id_categoria']);
-            $categoria = $cat ? $cat['nombre'] : '';
-        }
-        // Inicializar carrito si no existe
-        if (!isset($_SESSION['carrito'])) {
-            $_SESSION['carrito'] = [];
-        }
-        // Si ya está en el carrito, sumar cantidad
-        if (isset($_SESSION['carrito'][$id_producto])) {
-            $_SESSION['carrito'][$id_producto]['cantidad']++;
-        } else {
-            $_SESSION['carrito'][$id_producto] = [
-                'id' => $producto['id'],
-                'nombre' => $producto['nombre'],
-                'categoria' => $categoria,
-                'precio' => $producto['precio'],
-                'cantidad' => 1
-            ];
-        }
-        header('Location: index.php?accion=carrito');
+        $gestor->eliminarImagenProducto($id_img);
+        header("Location: index.php?accion=editarProducto&id=$id_producto");
         exit;
     }
-    public function mostrarCarrito()
+    public function mostrarDashboard()
     {
-        require_once 'Vista/html/carrito.php';
-    }
-
-    public function eliminarCarrito()
-    {
-        if (isset($_POST['id_producto']) && isset($_SESSION['carrito'][$_POST['id_producto']])) {
-            unset($_SESSION['carrito'][$_POST['id_producto']]);
-        }
-        header('Location: index.php?accion=carrito');
-        exit;
-    }
-
-    public function finalizarPedido()
-    {
-        if (!isset($_SESSION['usuario']) || empty($_SESSION['carrito'])) {
-            header('Location: index.php?accion=carrito');
-            exit;
-        }
         $gestor = new GestorAdmin();
-        $usuario = $gestor->obtenerUsuarioPorCorreo($_SESSION['usuario']);
-        $id_usuario = $usuario ? $usuario['id'] : null;
-        $fecha = date('Y-m-d');
-        $estado = 'Pendiente';
-        foreach ($_SESSION['carrito'] as $item) {
-            $gestor->guardarPedido($id_usuario, $item['id'], $item['cantidad'], $fecha, $estado);
-        }
-        unset($_SESSION['carrito']);
-        header('Location: index.php?accion=catalogo&mensaje=pedido_ok');
-        exit;
+        $pedidosPorMes = $gestor->pedidosPorMes();
+        $masVendidos = $gestor->productosMasVendidos();
+        require "Vista/html/dashboard.php";
     }
 }

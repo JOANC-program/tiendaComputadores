@@ -1,6 +1,7 @@
 <?php
 class GestorAdmin
 {
+
     public function verificarAdmin($correo, $contrasena)
     {
         $conexion = new Conexion();
@@ -17,6 +18,7 @@ class GestorAdmin
         }
         return false;
     }
+
     public function ingresar($correo, $contrasena)
     {
         $conexion = new Conexion();
@@ -39,6 +41,14 @@ class GestorAdmin
         $conexion = new Conexion();
         $conexion->abrir();
         $sql = "INSERT INTO productos (nombre, precio, descripcion, id_categoria, imagen) VALUES ('$nombre', '$precio', '$descripcion', '$id_categoria', '$rutaImagen')";
+        $conexion->consulta($sql);
+        $conexion->cerrar();
+    }
+    public function guardarImagenProducto($id_producto, $ruta)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "INSERT INTO imagenes_producto (id_producto, ruta_imagen) VALUES ('$id_producto', '$ruta')";
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
@@ -224,7 +234,7 @@ class GestorAdmin
         return $existe;
     }
 
-    public function guardarCliente($nombre, $correo, $contrasena)
+     public function guardarCliente($nombre, $correo, $contrasena)
     {
         $conexion = new Conexion();
         $conexion->abrir();
@@ -274,5 +284,80 @@ class GestorAdmin
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
+    public function obtenerImagenesPorProducto($id_producto)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT id, ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $imagenes = [];
+        while ($row = $result->fetch_assoc()) {
+            $imagenes[] = $row;
+        }
+        $conexion->cerrar();
+        return $imagenes;
+    }
+    public function eliminarImagenProducto($id_img)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        // Obtener la ruta de la imagen
+        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id = '$id_img' LIMIT 1";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $row = $result->fetch_assoc();
+        if ($row && !empty($row['ruta_imagen']) && file_exists($row['ruta_imagen'])) {
+            unlink($row['ruta_imagen']);
+        }
+        // Eliminar el registro de la base de datos
+        $sql = "DELETE FROM imagenes_producto WHERE id = '$id_img'";
+        $conexion->consulta($sql);
+        $conexion->cerrar();
+    }
+
+    // Pedidos por mes (últimos 12 meses)
+    public function pedidosPorMes()
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT DATE_FORMAT(fecha, '%Y-%m') as mes, COUNT(*) as cantidad
+                FROM pedidos
+                GROUP BY mes
+                ORDER BY mes DESC
+                LIMIT 12";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $labels = [];
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['mes'];
+            $data[] = $row['cantidad'];
+        }
+        $conexion->cerrar();
+        return ['labels' => array_reverse($labels), 'data' => array_reverse($data)];
+    }
+
+    // Productos más vendidos (top 5)
+    public function productosMasVendidos()
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT CONCAT(marca, ' ', modelo) as producto, SUM(cantidad) as total
+                FROM pedidos
+                JOIN productos ON pedidos.id_producto = productos.id
+                GROUP BY producto
+                ORDER BY total DESC
+                LIMIT 5";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $labels = [];
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['producto'];
+            $data[] = $row['total'];
+        }
+        $conexion->cerrar();
+        return ['labels' => $labels, 'data' => $data];
+    }
 }
-?>

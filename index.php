@@ -129,6 +129,9 @@ if (isset($_GET['accion'])) {
          if ($_GET["accion"] == "pedidoscliente") {
              $Controlador->verpagina('Vista/html/clientespedidos.php');
          }
+          if ($_GET["accion"] == "dashboard") {
+             $Controlador->mostrarDashboard();
+         }
         /* else {
         $Controlador->verpagina('Vista/html/error.html');
     }*/

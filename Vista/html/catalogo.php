@@ -17,14 +17,28 @@
         <h1>Tienda de Tenis</h1>
         <nav>
 
+<<<<<<< Updated upstream
             <a href="index.php?accion=catalogo">Catálogo</a>
             <!-- <a href="index.php?accion=loginAdmin">Zona Admin</a> -->
             <?php if (isset($_SESSION['usuario'])): ?>
+=======
+            <?php if (isset($_SESSION['admin'])): ?>
+                <a href="index.php?accion=productos">Productos</a>
+                <a href="index.php?accion=categorias">Categorías</a>
+                <a href="index.php?accion=pedidos">Pedidos</a>
+                <a href="index.php?accion=dashboard">Dashboard</a>
+                <a href="index.php?accion=catalogo">Catálogo</a>
+
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['cliente'])): ?>
+>>>>>>> Stashed changes
                 <a href="index.php?accion=carrito">Ver carrito
 
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
                     <?php endif; ?>
+<<<<<<< Updated upstream
                 </a>
             <?php endif; ?>
             <?php if (isset($_SESSION['usuario']) || isset($_SESSION['admin'])): ?>
@@ -33,6 +47,19 @@
             <?php endif; ?>
             <a href="index.php?accion=pedidoscliente">Pedidos</a>
             <!--<a href="index.php?accion=registroCliente">Registrarse</a>-->
+=======
+                 </a>
+                <a href="index.php?accion=pedidoscliente">Pedidos</a>
+
+                <a href="index.php?accion=catalogo">Catálogo</a>
+            <?php endif; ?>
+
+
+            <?php if (isset($_SESSION['cliente']) || isset($_SESSION['admin'])): ?>
+                <a href="index.php?accion=cerrarSesion">Cerrar sesión</a>
+
+            <?php endif; ?>
+>>>>>>> Stashed changes
         </nav>
     </header>
     <section id="catalogo">
@@ -77,7 +104,11 @@
                         <input type="hidden" name="id_producto" value="<?= $producto['id'] ?>">
                         <button type="submit">Agregar al carrito</button>
                     </form>
+<<<<<<< Updated upstream
                     <form action="index.php?accion=formularioPedido" method="post">
+=======
+                    <form action="index.php?accion=finalizarPedido" method="post">
+>>>>>>> Stashed changes
                         <input type="hidden" name="id_producto" value="<?= $producto['id'] ?>">
                         <button type="submit">Solicitar compra</button>
                     </form>
@@ -89,5 +120,6 @@
 <footer>
     <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
   </footer>
+
 
 </html>
