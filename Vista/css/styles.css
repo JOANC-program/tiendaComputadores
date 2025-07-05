@@ -94,19 +94,6 @@ footer {
 }
 
 
-<<<<<<< Updated upstream
-.container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-=======
->>>>>>> Stashed changes
 
 .form-box {
     padding: 20px;
@@ -202,8 +189,6 @@ button[type="submit"]:hover {
 .switch-form a:hover {
     text-decoration: underline;
 }
-<<<<<<< Updated upstream
-=======
 
 /* Estilos específicos para la página de login 
 
@@ -241,4 +226,3 @@ si afecta en algo esto estilos los cambia o borra o me avisa*/
     position: relative;
     overflow: hidden;
 }
->>>>>>> Stashed changes
