@@ -60,12 +60,5 @@
         <?php endif; ?>
     </section>
 </body>
-<<<<<<< Updated upstream
-<footer>
-    <p>&copy; 2025 Tienda de computadores y accesorios. Todos los derechos reservados.</p>
-  </footer>
-=======
-
->>>>>>> Stashed changes
 
 </html>
