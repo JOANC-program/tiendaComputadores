@@ -4,6 +4,7 @@ require_once "Controlador/Controlador.php";
 require_once "Modelo/Conexion.php";
 require_once "Modelo/GestorAdmin.php";
 require_once "Modelo/GestorCatalogo.php";
+require_once "Modelo/GestorPedidos.php";
 
 $Controlador = new Controlador();
 if (isset($_GET['accion'])) {

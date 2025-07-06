@@ -33,6 +33,18 @@ class GestorCatalogo
         return $productos;
     }
 
+    public function obtenerProductoPorId($id)
+    {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT * FROM productos WHERE id = '$id' LIMIT 1";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $producto = $result->fetch_assoc();
+        $conexion->cerrar();
+        return $producto;
+    }
+    
     public function listarProductosPorCategoria($id_categoria)
     {
         $conexion = new Conexion();

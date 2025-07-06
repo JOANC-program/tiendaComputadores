@@ -1,7 +1,17 @@
 <?php
 class GestorAdmin
 {
+  private $conexion_obj;
 
+    public function __construct() {
+        $this->conexion_obj = new Conexion();
+        $this->conexion_obj->abrir();
+    }
+
+    public function __destruct() {
+        $this->conexion_obj->cerrar();
+    }
+    
     public function verificarAdmin($correo, $contrasena)
     {
         $conexion = new Conexion();
@@ -19,19 +29,17 @@ class GestorAdmin
         return false;
     }
 
-    public function ingresar($correo, $contrasena)
-    {
-        $conexion = new Conexion();
-        $conexion->abrir();
-        $sql = "SELECT * FROM usuarios WHERE correo='$correo' LIMIT 1";
-        $conexion->consulta($sql);
-        $result = $conexion->obtenerResult();
-        $usuario = $result->fetch_assoc();
-        $conexion->cerrar();
+    public function ingresar($correo, $contrasena) {
+        $mysqli = $this->conexion_obj->getMysqli();
+        $stmt = $mysqli->prepare("SELECT id, nombre, correo, contrasena FROM clientes WHERE correo = ?"); // Asegúrate de seleccionar el 'id'
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $cliente = $result->fetch_assoc(); // Esto debería ser un array como ['id' => 1, 'nombre' => '...', 'correo' => '...']
+        $stmt->close();
 
-        // Verifica la contraseña hasheada y el rol cliente
-        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'cliente') {
-            return true;
+        if ($cliente && password_verify($contrasena, $cliente['contrasena'])) {
+            return $cliente; // ¡Esto devuelve el array asociativo del cliente!
         }
         return false;
     }

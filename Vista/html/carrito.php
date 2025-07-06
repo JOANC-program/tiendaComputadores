@@ -38,7 +38,7 @@
                     <?php foreach ($_SESSION['carrito'] as $item): ?>
                         <tr>
                             <td><?= htmlspecialchars($item['nombre']) ?></td>
-                            <td><?= htmlspecialchars($item['categoria']) ?></td>
+                            <td><?= htmlspecialchars($item['categoria']['nombre']) ?></td>
                             <td>$<?= number_format($item['precio'], 0, ',', '.') ?></td>
                             <td><?= $item['cantidad'] ?></td>
                             <td>$<?= number_format($item['precio'] * $item['cantidad'], 0, ',', '.') ?></td>
