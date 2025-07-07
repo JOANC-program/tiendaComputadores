@@ -289,6 +289,7 @@ public function eliminarCarrito() {
         $pedidos = $gestor->listarPedidos();
         require "Vista/html/pedidos.php";
     }
+    
     public function mostrarProductos()
     {
         $gestor = new GestorAdmin();

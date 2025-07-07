@@ -31,15 +31,15 @@ class GestorAdmin
 
     public function ingresar($correo, $contrasena) {
         $mysqli = $this->conexion_obj->getMysqli();
-        $stmt = $mysqli->prepare("SELECT id, nombre, correo, contrasena FROM clientes WHERE correo = ?"); // Asegúrate de seleccionar el 'id'
+        $stmt = $mysqli->prepare("SELECT id, nombre, correo, contrasena, rol FROM usuarios WHERE correo = ?"); // Asegúrate de seleccionar el 'id'
         $stmt->bind_param("s", $correo);
         $stmt->execute();
         $result = $stmt->get_result();
-        $cliente = $result->fetch_assoc(); // Esto debería ser un array como ['id' => 1, 'nombre' => '...', 'correo' => '...']
+        $usuario = $result->fetch_assoc(); 
         $stmt->close();
 
-        if ($cliente && password_verify($contrasena, $cliente['contrasena'])) {
-            return $cliente; // ¡Esto devuelve el array asociativo del cliente!
+        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'cliente'){
+            return $usuario; // ¡Esto devuelve el array asociativo del cliente!
         }
         return false;
     }
