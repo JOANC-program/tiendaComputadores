@@ -44,14 +44,18 @@ class GestorAdmin
         return false;
     }
 
-    public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $rutaImagen)
+  public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "INSERT INTO productos (nombre, precio, descripcion, id_categoria, imagen) VALUES ('$nombre', '$precio', '$descripcion', '$id_categoria', '$rutaImagen')";
+        $sql = "INSERT INTO productos (marca, modelo, tipo, especificaciones, precio, id_categoria) 
+                VALUES ('$marca', '$modelo', '$tipo', '$especificaciones', '$precio', '$id_categoria')";
         $conexion->consulta($sql);
+        $id_producto = $conexion->obtenerInsertId();
         $conexion->cerrar();
+        return $id_producto;
     }
+
     public function guardarImagenProducto($id_producto, $ruta)
     {
         $conexion = new Conexion();

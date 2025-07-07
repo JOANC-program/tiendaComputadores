@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Catálogo de Productos</title>
-    <link rel="stylesheet" href="Vista\css\styles.css">
+    <link rel="stylesheet" href="Vista/css/styles.css">
 </head>
 
 <body>
@@ -23,6 +23,12 @@
                 <a href="index.php?accion=pedidos">Pedidos</a>
                 <a href="index.php?accion=dashboard">Dashboard</a>
                 <a href="index.php?accion=catalogo">Catálogo</a>
+                 <a href="index.php?accion=carrito">Ver carrito
+
+                    <?php if (!empty($_SESSION['carrito'])): ?>
+                        (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
+                    <?php endif; ?>
+                 </a>
 
             <?php endif; ?>
 

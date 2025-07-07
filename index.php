@@ -37,12 +37,14 @@ if (isset($_GET['accion'])) {
         $Controlador->ingresar($correo, $contrasena);
     }
     if ($_GET["accion"] == "guardarProducto") {
-        $nombre = $_POST["nombre"];
+        $marca = $_POST["marca"];
+        $modelo = $_POST["modelo"];
+        $tipo = $_POST["tipo"];
+        $especificaciones = $_POST["especificaciones"];
         $precio = $_POST["precio"];
-        $descripcion = $_POST["descripcion"];
         $id_categoria = $_POST["id_categoria"];
-        $imagen = $_FILES["imagen"];
-        $Controlador->guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen);
+        $imagenes = $_FILES["imagenes"];
+        $Controlador->guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes);
     }
     if ($_GET["accion"] == "editarProducto" && isset($_GET["id"])) {
         $id = $_GET["id"];
@@ -91,6 +93,10 @@ if (isset($_GET['accion'])) {
         $contrasena = $_POST["contrasena"];
         $Controlador->guardarCliente($nombre, $correo, $contrasena);
     }
+    if( $_GET["accion"] == "eliminarCarrito") {
+        $Controlador->eliminarCarrito();
+    }
+
     if ($_GET["accion"] == "categorias") {
         $Controlador->mostrarCategorias();
     }
@@ -101,7 +107,7 @@ if (isset($_GET['accion'])) {
         $Controlador->mostrarProductos();
     }
     if ($_GET["accion"] == "cerrarSesion") {
-        require "Vista/html/login.php";
+     $Controlador->cerrarSesion();
     }
     if ($_GET["accion"] == "cambiarEstadoPedido") {
         $id_pedido = $_POST["id_pedido"];
@@ -128,7 +134,7 @@ if (isset($_GET['accion'])) {
         }
 
          if ($_GET["accion"] == "pedidoscliente") {
-             $Controlador->verpagina('Vista/html/clientespedidos.php');
+             $Controlador->mostrarPedidosCliente();
          }
           if ($_GET["accion"] == "dashboard") {
              $Controlador->mostrarDashboard();

@@ -24,7 +24,7 @@ class Controlador
 
     public function ingresar($correo, $contrasena)
     {
-         unset($_SESSION['admin']);
+        unset($_SESSION['admin']);
         unset($_SESSION['cliente']);
         $gestor = new GestorAdmin();
         $admin = $gestor->verificarAdmin($correo, $contrasena);
@@ -35,12 +35,12 @@ class Controlador
             exit;
         }
 
-        $cliente_data = $gestor->ingresar($correo, $contrasena); 
+        $cliente_data = $gestor->ingresar($correo, $contrasena);
 
         if ($cliente_data) { // Si $cliente_data no es false (es decir, las credenciales son correctas)
             // Guarda el ID y el correo del cliente como un array en la sesión
             $_SESSION['cliente'] = [
-                'id' => $cliente_data['id'], 
+                'id' => $cliente_data['id'],
                 'correo' => $cliente_data['correo']
             ];
             header('Location: index.php?accion=catalogo'); // Página de catálogo para clientes
@@ -54,113 +54,66 @@ class Controlador
     {
         require_once 'Vista/html/carrito.php';
     }
-    
-public function agregarCarrito() {
-    if (isset($_POST['id_producto'])) {
-        $id_producto = $_POST['id_producto'];
 
-        // Estás instanciando GestorAdmin, no GestorCatalogo aquí.
-        // Si obtenerProductoPorId y obtenerCategoriaPorId están en GestorAdmin, está bien.
-        // Si están en GestorCatalogo, deberías instanciar GestorCatalogo aquí.
-        $gestor = new GestorAdmin(); 
-        $producto = $gestor->obtenerProductoPorId($id_producto);
+    public function agregarCarrito()
+    {
+        if (isset($_POST['id_producto'])) {
+            $id_producto = $_POST['id_producto'];
 
-        if ($producto) {
-            if (!isset($_SESSION['carrito'])) {
-                $_SESSION['carrito'] = [];
-            }
+            $gestor = new GestorAdmin(); // O GestorCatalogo si obtenerProductoPorId está ahí
+            $producto = $gestor->obtenerProductoPorId($id_producto);
 
-            $encontrado = false;
-            foreach ($_SESSION['carrito'] as &$item) {
-                if ($item['id'] == $id_producto) {
-                    $item['cantidad']++;
-                    $encontrado = true;
-                    break;
+            if ($producto) {
+                if (!isset($_SESSION['carrito'])) {
+                    $_SESSION['carrito'] = [];
+                }
+
+                $encontrado = false;
+                foreach ($_SESSION['carrito'] as &$item) {
+                    if ($item['id'] == $id_producto) {
+                        $item['cantidad']++;
+                        $encontrado = true;
+                        break;
+                    }
+                }
+                unset($item);
+
+                if (!$encontrado) {
+                    // Obtén la categoría completa como un array
+                    $categoria_data = $gestor->obtenerCategoriaPorId($producto['id_categoria']);
+
+                    $_SESSION['carrito'][] = [
+                        'id' => $producto['id'],
+                        'nombre' => $producto['nombre'],
+                        'precio' => $producto['precio'],
+                        // ¡EL CAMBIO CLAVE ESTÁ AQUÍ!
+                        'categoria' => $categoria_data, // Almacena el array completo de la categoría
+                        // Ahora $item['categoria'] en el carrito será como ['id' => 1, 'nombre' => 'Laptops']
+                        'cantidad' => 1
+                    ];
                 }
             }
-            unset($item);
-
-            if (!$encontrado) {
-                $categoria_data = $gestor->obtenerCategoriaPorId($producto['id_categoria']);
-                
-                $_SESSION['carrito'][] = [
-                    'id' => $producto['id'],
-                    'nombre' => $producto['nombre'],
-                    'precio' => $producto['precio'],
-                    'categoria' => $categoria_data['nombre'], 
-                    'cantidad' => 1
-                ];
-            }
         }
-    }
-    header("Location: index.php?accion=catalogo"); 
-    exit;
-}
-
-
-public function finalizarPedido() {
-    $conexion = new Conexion();
-    if (!isset($_SESSION['cliente'])) {
-        header("Location: index.php?accion=login"); 
+        header("Location: index.php?accion=catalogo");
         exit;
     }
-    if (empty($_SESSION['carrito'])) {
-        header("Location: index.php?accion=carrito&mensaje=carrito_vacio"); 
-        exit;
-    }
-     $id_cliente = $_SESSION['cliente']['id']; 
-        $modeloPedidos= new GestorPedidos();
 
-    try {
-        // Inicia una transacción si vas a realizar múltiples inserciones en la base de datos
-        $conexion->beginTransaction();
 
-           $id_pedido = $modeloPedidos->crearPedido($id_cliente); // Método para crear el registro principal del pedido
-
-        if (!$id_pedido) {
-            throw new Exception("Error al crear el pedido principal.");
-        }
-       foreach ($_SESSION['carrito'] as $item) {
-            $id_producto = $item['id'];
-            $cantidad = $item['cantidad'];
-            $precio_unitario = $item['precio']; 
-
-            $modeloPedidos->agregarProductoAPedido($id_pedido, $id_producto, $cantidad, $precio_unitario);
-        }
-
-        // Confirma la transacción
-        $conexion->commit();
-
-        // Limpia el carrito después de una creación de pedido exitosa
-        unset($_SESSION['carrito']);
-
-        header("Location: index.php?accion=pedidoscliente&mensaje=pedido_ok"); // Redirecciona a los pedidos del cliente con mensaje de éxito
-        exit;
-
-    } catch (Exception $e) {
-        $conexion->rollBack(); // Revierte la transacción en caso de error
-        // Registra el error y redirecciona con un mensaje de error
-        error_log("Error al finalizar el pedido: " . $e->getMessage());
-        header("Location: index.php?accion=carrito&mensaje=error_pedido");
-        exit;
-    }
-}
-
-    public function guardarProducto($nombre, $precio, $descripcion, $id_categoria, $imagen)
+    public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria, $imagenes)
     {
         $gestor = new GestorAdmin();
-        // Guardar imagen si se subió
-        $rutaImagen = "";
-        if ($imagen["tmp_name"]) {
-            $nombreArchivo = uniqid() . "_" . basename($imagen["name"]);
-            $rutaDestino = "Vista/img/" . $nombreArchivo;
-            move_uploaded_file($imagen["tmp_name"], $rutaDestino);
-            $rutaImagen = $rutaDestino;
+        $id_producto = $gestor->guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria);
+
+        // Guardar imágenes
+        foreach ($imagenes['tmp_name'] as $key => $tmp_name) {
+            if ($tmp_name) {
+                $nombreArchivo = uniqid() . "_" . basename($imagenes["name"][$key]);
+                $rutaDestino = "Vista/img/" . $nombreArchivo;
+                move_uploaded_file($tmp_name, $rutaDestino);
+                $gestor->guardarImagenProducto($id_producto, $rutaDestino);
+            }
         }
 
-        $gestor->guardarProducto($nombre, $precio, $descripcion, $id_categoria, $rutaImagen);
-
-        // Redirigir para evitar reenvío del formulario
         header("Location: index.php?accion=productos");
         exit;
     }
@@ -172,7 +125,7 @@ public function finalizarPedido() {
         $imagenes = $gestor->obtenerImagenesPorProducto($id);
         require "Vista/html/editarProducto.php";
     }
- public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen)
+    public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $imagen)
     {
         $gestor = new GestorAdmin();
         // Procesar imagen solo si se subió una nueva
@@ -204,24 +157,68 @@ public function finalizarPedido() {
         header("Location: index.php?accion=categorias");
         exit;
     }
-    // Dentro de Controlador.php
+  public function finalizarPedido()
+    {
 
-public function eliminarCarrito() {
-    if (isset($_POST['id_producto']) && isset($_SESSION['carrito'])) {
-        $id_producto_a_eliminar = $_POST['id_producto'];
+        $id_cliente = $_SESSION['cliente']['id']; // Asume que el ID del usuario está en $_SESSION['cliente']['id']
+
+        // 2. Obtener el carrito actual de la sesión
+        $carrito_actual = $_SESSION['carrito'] ?? [];
+
+        // 3. Validar el carrito antes de procesar el pedido
+        if (!is_array($carrito_actual) || empty($carrito_actual)) {
+            header("Location: index.php?accion=carrito&mensaje=carrito_vacio");
+            exit;
+        }
+
+        // 4. Instanciar el GestorPedidos
+        $modeloPedidos = new GestorPedidos(); 
         
-        foreach ($_SESSION['carrito'] as $key => $item) {
-            if ($item['id'] == $id_producto_a_eliminar) {
-                unset($_SESSION['carrito'][$key]); // Elimina el artículo
-                break;
+        // 5. Llamar a procesarPedidoCompleto
+        // Este método se encarga de insertar cada línea de producto en tu tabla 'pedidos'
+        $pedido_exitoso = $modeloPedidos->procesarPedidoCompleto($id_cliente, $carrito_actual); 
+
+        // 6. Manejar el resultado
+        if ($pedido_exitoso) {
+            // Pedido(s) creado(s) exitosamente, vaciar el carrito
+            unset($_SESSION['carrito']);
+            header("Location: index.php?accion=pedidoscliente&mensaje=pedido_ok");
+            exit;
+        } else {
+            // Hubo un error al procesar el pedido
+            error_log("Finalizar Compra: procesarPedidoCompleto devolvió false para cliente ID: " . $id_cliente);
+            header("Location: index.php?accion=carrito&mensaje=error_pedido");
+            exit;
+        }
+    }
+
+    public function mostrarPedidosCliente()
+    {
+        $id_cliente = $_SESSION['cliente']['id'];
+
+
+        $gestorPedidos = new GestorPedidos();
+
+        $pedidos = $gestorPedidos->obtenerPedidosPorCliente($id_cliente);
+        require "Vista/html/clientespedidos.php";
+ 
+    }
+
+    public function eliminarCarrito()
+    {
+        // Verifica si se ha enviado el índice del producto a eliminar
+        if (isset($_POST['indice_producto_a_eliminar']) && isset($_SESSION['carrito'])) {
+            $indice_a_eliminar = $_POST['indice_producto_a_eliminar'];
+            if (isset($_SESSION['carrito'][$indice_a_eliminar])) {
+                unset($_SESSION['carrito'][$indice_a_eliminar]); // Elimina el elemento por su índice
+
+                // Opcional pero recomendado: Reindexa el array después de eliminar
+                $_SESSION['carrito'] = array_values($_SESSION['carrito']);
             }
         }
-        // Reindexa el array si es necesario (opcional pero buena práctica después de eliminar)
-        $_SESSION['carrito'] = array_values($_SESSION['carrito']); 
+        header("Location: index.php?accion=carrito"); // Redirecciona de nuevo al carrito
+        exit;
     }
-    header("Location: index.php?accion=carrito"); // Redirecciona de nuevo al carrito
-    exit;
-}
     public function eliminarCategoria($id)
     {
         $gestor = new GestorAdmin();
@@ -232,6 +229,7 @@ public function eliminarCarrito() {
 
         exit;
     }
+    
     public function procesarPedido($correo, $contrasena, $id_producto, $cantidad)
     {
         $gestor = new GestorAdmin();
@@ -239,6 +237,7 @@ public function eliminarCarrito() {
 
         if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
             $id_usuario = $usuario['id'];
+
             $fecha = date('Y-m-d');
             $estado = "Pendiente";
             $gestor->guardarPedido($id_usuario, $id_producto, $cantidad, $fecha, $estado);
@@ -289,7 +288,7 @@ public function eliminarCarrito() {
         $pedidos = $gestor->listarPedidos();
         require "Vista/html/pedidos.php";
     }
-    
+
     public function mostrarProductos()
     {
         $gestor = new GestorAdmin();
@@ -315,6 +314,18 @@ public function eliminarCarrito() {
         $gestor = new GestorAdmin();
         $categoria = $gestor->obtenerCategoriaPorId($id);
         require "Vista/html/editarCategoria.php";
+    }
+    public function cerrarSesion()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        unset($_SESSION['carrito']);
+        session_unset();
+        session_destroy();
+
+        header("Location: index.php?accion=login");
+        exit;
     }
 
     public function actualizarCategoria($id, $nombre)
