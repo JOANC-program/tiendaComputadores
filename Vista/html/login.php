@@ -43,7 +43,7 @@
               
                 <button type="submit">Registrar</button>
             </form>
-            <p class="switch-form">¿Ya tienes cuenta? <a href="#" id="show-login">Iniciar Sesión aquí</a></p>
+            <p class="switch-form">¿Ya tienes cuenta? <a href="#" id="show-login">Iniciar Sesión aquí </a></p>
         </div>
     </div>
     <script src="Vista/script/script.js"></script>

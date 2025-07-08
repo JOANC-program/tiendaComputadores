@@ -59,7 +59,7 @@
 
 <body>
     <?php
-    // Asegúrate de que la sesión esté iniciada
+    // Asegúrate de que la sesión esté iniciada y que la variable de sesión esté configurada
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -82,8 +82,7 @@
 
             <?php endif; ?>
 
-            
-            <?php if (isset($_SESSION['cliente'])): ?>
+                        <?php if (isset($_SESSION['cliente'])): ?>
                 <a href="index.php?accion=carrito">Ver carrito
 
                     <?php if (!empty($_SESSION['carrito'])): ?>
