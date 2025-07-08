@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,17 +24,27 @@
                 </option>
             <?php endforeach; ?>
         </select>
-        <p>Imágenes actuales:</p>
-        <?php
-        $imagenes = (new GestorAdmin())->obtenerImagenesPorProducto($producto['id']);
-        foreach ($imagenes as $img): ?>
-            <img src="<?= htmlspecialchars($img) ?>" style="width:50px;height:50px;object-fit:cover;margin:2px;">
-        <?php endforeach; ?>
         <br>
         <label>Agregar nuevas imágenes:</label>
         <input type="file" name="imagenes[]" multiple>
         <button type="submit">Actualizar Producto</button>
     </form>
+
+    <p>Imágenes actuales:</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+    <?php foreach ($imagenes as $id_img => $ruta_img): ?>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <img src="<?= htmlspecialchars($ruta_img) ?>" class="img-miniatura" style="margin-bottom:4px;">
+            <form action="index.php?accion=eliminarImagen" method="post" style="margin:0;">
+                <input type="hidden" name="id_img" value="<?= $id_img ?>">
+                <input type="hidden" name="id_producto" value="<?= $producto['id'] ?>">
+                <button type="submit" class="btn-eliminar-img" title="Eliminar imagen" onclick="return confirm('¿Eliminar esta imagen?');"
+                    style="background:#dc3545;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:16px;line-height:20px;cursor:pointer;padding:0;">×</button>
+            </form>
+        </div>
+    <?php endforeach; ?>
+    </div>
+
     <a href="index.php?accion=productos">Volver</a>
 </body>
 </html>

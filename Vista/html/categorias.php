@@ -34,7 +34,7 @@
                         <button type="button">Editar</button>
                     </a>
                     <a href="index.php?accion=eliminarCategoria&id=<?= $cat['id'] ?>"
-                        onclick="return confirm('¿Seguro que deseas eliminar esta categoría?, se eliminaran los productos asociados.')(<?= $cat['id'] ?>);">
+                        onclick="return confirm('¿Seguro que deseas eliminar esta categoría? Se eliminarán los productos asociados.');">
                         <button type="button">Eliminar</button>
                     </a>
                 </li>

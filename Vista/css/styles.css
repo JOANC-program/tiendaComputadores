@@ -219,3 +219,37 @@ si afecta en algo esto estilos los cambia o borra o me avisa*/
     position: relative;
     overflow: hidden;
 }
+
+/* Botón eliminar imagen en editar producto */
+.btn-eliminar-img {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    margin-left: 4px;
+    vertical-align: middle;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
+}
+.btn-eliminar-img:hover {
+    background: #b52a37;
+}
+.img-miniatura {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+}
+.img-contenedor {
+    display: inline-block;
+    margin: 4px 8px 4px 0;
+    vertical-align: middle;
+}

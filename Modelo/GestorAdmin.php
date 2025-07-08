@@ -138,15 +138,13 @@ class GestorAdmin
         return $producto;
     }
 
-    public function actualizarProducto($id, $nombre, $precio, $descripcion, $id_categoria, $rutaImagen = null)
+    public function actualizarProducto($id, $marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        if ($rutaImagen) {
-            $sql = "UPDATE productos SET nombre='$nombre', precio='$precio', descripcion='$descripcion', id_categoria='$id_categoria', imagen='$rutaImagen' WHERE id='$id'";
-        } else {
-            $sql = "UPDATE productos SET nombre='$nombre', precio='$precio', descripcion='$descripcion', id_categoria='$id_categoria' WHERE id='$id'";
-        }
+        $sql = "UPDATE productos 
+                SET marca='$marca', modelo='$modelo', tipo='$tipo', especificaciones='$especificaciones', precio='$precio', id_categoria='$id_categoria'
+                WHERE id='$id'";
         $conexion->consulta($sql);
         $conexion->cerrar();
     }
@@ -156,7 +154,11 @@ class GestorAdmin
         $conexion = new Conexion();
         $conexion->abrir();
 
-        // 1. Obtener todas las rutas de imágenes asociadas
+        // 1. Eliminar pedidos asociados a este producto
+        $sql = "DELETE FROM pedidos WHERE id_producto = '$id'";
+        $conexion->consulta($sql);
+
+        // 2. Eliminar imágenes asociadas
         $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
@@ -166,11 +168,11 @@ class GestorAdmin
             }
         }
 
-        // 2. Eliminar registros de imágenes asociadas
+        // 3. Eliminar registros de imágenes asociadas
         $sql = "DELETE FROM imagenes_producto WHERE id_producto = '$id'";
         $conexion->consulta($sql);
 
-        // 3. Eliminar el producto
+        // 4. Eliminar el producto
         $sql = "DELETE FROM productos WHERE id = '$id'";
         $conexion->consulta($sql);
 
@@ -315,12 +317,12 @@ class GestorAdmin
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
+        $sql = "SELECT id, ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $imagenes = [];
         while ($row = $result->fetch_assoc()) {
-            $imagenes[] = $row['ruta_imagen'];
+            $imagenes[$row['id']] = $row['ruta_imagen'];
         }
         $conexion->cerrar();
         return $imagenes;
