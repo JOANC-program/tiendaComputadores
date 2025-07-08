@@ -254,7 +254,7 @@ public function guardarCliente($nombre, $correo, $contrasena)
 {
     $gestor = new GestorAdmin();
     if ($gestor->existeCorreo($correo)) {
-        echo "<script>alert('El correo ya está registrado');window.location='index.php?accion=registroCliente';</script>";
+        echo "<script>alert('El correo ya está registrado');window.location='index.php?accion=login';</script>";
         exit;
     }
     $gestor->guardarCliente($nombre, $correo, $contrasena);
