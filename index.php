@@ -28,8 +28,7 @@ if (isset($_GET['accion'])) {
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
         $Controlador->ingresar($correo, $contrasena);
-    }
-    if ($_GET["accion"] == "guardarProducto") {
+    }elseif ($_GET["accion"] == "guardarProducto") {
         $marca = $_POST["marca"];
         $modelo = $_POST["modelo"];
         $tipo = $_POST["tipo"];
@@ -74,22 +73,17 @@ if (isset($_GET['accion'])) {
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
         $Controlador->guardarCliente($nombre, $correo, $contrasena);
-    }
-    if( $_GET["accion"] == "eliminarCarrito") {
+    }elseif( $_GET["accion"] == "eliminarCarrito") {
         $Controlador->eliminarCarrito();
-    }
-
-    if ($_GET["accion"] == "categorias") {
+    }elseif ($_GET["accion"] == "categorias") {
         $Controlador->mostrarCategorias();
     } elseif ($_GET["accion"] == "pedidos") {
         $Controlador->mostrarPedidos();
     } elseif ($_GET["accion"] == "productos") {
         $Controlador->mostrarProductos();
-    }
-    if ($_GET["accion"] == "cerrarSesion") {
+    }elseif ($_GET["accion"] == "cerrarSesion") {
      $Controlador->cerrarSesion();
-    }
-    if ($_GET["accion"] == "cambiarEstadoPedido") {
+    }elseif ($_GET["accion"] == "cambiarEstadoPedido") {
         $id_pedido = $_POST["id_pedido"];
         $estado = $_POST["estado"];
         $Controlador->cambiarEstadoPedido($id_pedido, $estado);
@@ -106,30 +100,20 @@ if (isset($_GET['accion'])) {
         $Controlador->eliminarImagenProducto($id_img, $id_producto);
     } elseif ($_GET["accion"] == "dashboard") {
         $Controlador->mostrarDashboard();
-    } else {
-    }
-        if ($_GET["accion"] == "carrito") {
-            $Controlador->mostrarCarrito();
-        }
-        if ($_GET["accion"] == "agregarCarrito") {
-            $Controlador->agregarCarrito();
-        }
-        if ($_GET["accion"] == "finalizarPedido") {
-            $Controlador->finalizarPedido();
-        }
-
-         if ($_GET["accion"] == "pedidoscliente") {
-             $Controlador->mostrarPedidosCliente();
-         }
-          if ($_GET["accion"] == "dashboard") {
-             $Controlador->mostrarDashboard();
-         }
-        /* else {
+    }elseif ($_GET["accion"] == "carrito") {
+        $Controlador->mostrarCarrito();
+    }elseif ($_GET["accion"] == "agregarCarrito") {
+        $Controlador->agregarCarrito();
+    }elseif ($_GET["accion"] == "finalizarPedido") {
+        $Controlador->finalizarPedido();
+    }elseif ($_GET["accion"] == "pedidoscliente") {
+        $Controlador->mostrarPedidosCliente();
+    }else {
         $Controlador->verpagina('Vista/html/error.html');
-
     }
 } else {
-    header('Location: index.php?accion=catalogo');
+    header('Location: index.php?accion=login');
     exit;
 }
+
 ?>
