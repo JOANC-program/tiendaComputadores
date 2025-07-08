@@ -1,6 +1,17 @@
 <?php
 class GestorAdmin
 {
+  private $conexion_obj;
+
+    public function __construct() {
+        $this->conexion_obj = new Conexion();
+        $this->conexion_obj->abrir();
+    }
+
+    public function __destruct() {
+        $this->conexion_obj->cerrar();
+    }
+    
     public function verificarAdmin($correo, $contrasena)
     {
         $conexion = new Conexion();
@@ -18,7 +29,22 @@ class GestorAdmin
         return false;
     }
 
-    public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
+    public function ingresar($correo, $contrasena) {
+        $mysqli = $this->conexion_obj->getMysqli();
+        $stmt = $mysqli->prepare("SELECT id, nombre, correo, contrasena, rol FROM usuarios WHERE correo = ?"); // Asegúrate de seleccionar el 'id'
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc(); 
+        $stmt->close();
+
+        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'cliente'){
+            return $usuario; // ¡Esto devuelve el array asociativo del cliente!
+        }
+        return false;
+    }
+
+  public function guardarProducto($marca, $modelo, $tipo, $especificaciones, $precio, $id_categoria)
     {
         $conexion = new Conexion();
         $conexion->abrir();
@@ -236,7 +262,7 @@ class GestorAdmin
         return $existe;
     }
 
-    public function guardarCliente($nombre, $correo, $contrasena)
+     public function guardarCliente($nombre, $correo, $contrasena)
     {
         $conexion = new Conexion();
         $conexion->abrir();
