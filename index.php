@@ -108,20 +108,20 @@ if (isset($_GET['accion'])) {
         $Controlador->mostrarDashboard();
     } else {
     }
-        if ($_GET["accion"] == "carrito") {
+     if ($_GET["accion"] == "carrito") {
             $Controlador->mostrarCarrito();
-        }
-        if ($_GET["accion"] == "agregarCarrito") {
+    }
+    if ($_GET["accion"] == "agregarCarrito") {
             $Controlador->agregarCarrito();
-        }
-        if ($_GET["accion"] == "finalizarPedido") {
+    }
+    if ($_GET["accion"] == "finalizarPedido") {
             $Controlador->finalizarPedido();
-        }
+    }
 
-         if ($_GET["accion"] == "pedidoscliente") {
+    if ($_GET["accion"] == "pedidoscliente") {
              $Controlador->mostrarPedidosCliente();
-         }
-          if ($_GET["accion"] == "dashboard") {
+    }
+     if ($_GET["accion"] == "dashboard") {
              $Controlador->mostrarDashboard();
          }
         /* else {
