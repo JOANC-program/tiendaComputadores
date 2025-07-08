@@ -11,34 +11,22 @@ class GestorPedidos
         $this->conexionObj = new Conexion(); 
     }
 
-    /**
-     * Inserta una línea de producto en la tabla 'pedidos'.
-     * Esta función actúa como el método para añadir CADA producto del carrito
-     * a la tabla 'pedidos', que en tu esquema es la tabla de detalles.
-     *
-     * @param int $id_usuario El ID del usuario.
-     * @param int $id_producto El ID del producto.
-     * @param int $cantidad La cantidad del producto.
-     * @param float $precio_unitario El precio unitario del producto (lo necesitamos para calcular el total del pedido).
-     * @return int|bool El ID del registro insertado (la línea de pedido) si es exitoso, o false si hay un error.
-     */
+    
     public function crearPedido($id_usuario, $id_producto, $cantidad, $precio_unitario) {
         try {
             $this->conexionObj->abrir(); 
             $mysqli_conn = $this->conexionObj->getMysqli();
 
-            $fecha = date('Y-m-d H:i:s'); // La columna 'fecha' en tu tabla
-            $estado = "Pendiente"; // La columna 'estado' en tu tabla
+            $fecha = date('Y-m-d H:i:s'); 
+            $estado = "Pendiente"; 
 
-            // Escapar y asegurar los tipos de datos para la consulta directa
             $id_usuario_escaped = (int) $id_usuario; 
             $id_producto_escaped = (int) $id_producto; 
             $cantidad_escaped = (int) $cantidad; 
             $fecha_escaped = $mysqli_conn->real_escape_string($fecha);
             $estado_escaped = $mysqli_conn->real_escape_string($estado);
 
-            // Construir la consulta SQL directamente usando tus columnas:
-            // id_usuario, id_producto, cantidad, fecha, estado
+
             $sql = "INSERT INTO pedidos (id_usuario, id_producto, cantidad, fecha, estado) 
                     VALUES ($id_usuario_escaped, $id_producto_escaped, $cantidad_escaped, '$fecha_escaped', '$estado_escaped')";
 

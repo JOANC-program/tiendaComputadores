@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Bogota');
+
 session_start();
 require_once "Controlador/Controlador.php";
 require_once "Modelo/Conexion.php";

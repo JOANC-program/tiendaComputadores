@@ -271,9 +271,13 @@ class GestorAdmin
         $conexion = new Conexion();
         $conexion->abrir();
         $hash = password_hash($contrasena, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO usuarios (nombre, correo, contrasena) VALUES ('$nombre', '$correo', '$hash')";
+        // Guardar siempre como cliente
+        $sql = "INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES ('$nombre', '$correo', '$hash', 'cliente')";
         $conexion->consulta($sql);
+        $guardar = $conexion->obtenerResult();
+   
         $conexion->cerrar();
+        return $guardar;
     }
 
     public function obtenerUsuarioPorCorreo($correo)

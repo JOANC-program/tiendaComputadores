@@ -257,9 +257,16 @@ public function guardarCliente($nombre, $correo, $contrasena)
         echo "<script>alert('El correo ya está registrado');window.location='index.php?accion=login';</script>";
         exit;
     }
-    $gestor->guardarCliente($nombre, $correo, $contrasena);
-    echo "<script>alert('Registro exitoso, ahora puede solicitar pedidos');window.location='index.php?accion=catalogo';</script>";
-    exit;
+    $guardar = $gestor->guardarCliente($nombre, $correo, $contrasena);
+    if ($guardar) {
+        echo "<script>alert('Registro exitoso, ahora puede solicitar pedidos');window.location='index.php?accion=catalogo';</script>";
+         $_SESSION['cliente'] = [
+                'id' => $guardar['id'],
+                'correo' => $guardar['correo']
+            ];
+            exit;
+    }
+
 }
 public function mostrarCatalogo()
 {
