@@ -61,7 +61,7 @@
 <body>
  
     <header>
-        <h1>Tienda computadores y repuetsos</h1>
+        <h1>Tienda computadores y repuestos</h1>
         <nav>
 
        

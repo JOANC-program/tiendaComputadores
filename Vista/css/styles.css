@@ -187,7 +187,101 @@ button[type="submit"]:hover {
 
 
 si afecta en algo esto estilos los cambia o borra o me avisa*/
-
+ .pagination {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px; /* Un poco más de espacio inferior */
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Permite que los enlaces se envuelvan si hay muchos */
+        }
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .pagination a:hover {
+            background-color: #f2f2f2;
+            color: #007bff;
+            border-color: #007bff;
+        }
+        .pagination .current-page {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+            font-weight: bold;
+            cursor: default;
+        }
+        .pagination .disabled {
+            color: #ccc;
+            pointer-events: none; /* Deshabilita clics */
+            background-color: #f9f9f9;
+        }
+        /* Estilos para la cuadrícula de productos, si no están ya en styles.css */
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px; /* O el ancho máximo que desees para el contenido */
+            margin: 0 auto; /* Centrar el contenedor de productos */
+        }
+        .producto {
+            border: 1px solid #eee;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Para empujar el botón al final */
+        }
+        .producto img {
+            max-width: 100%;
+            height: 200px; /* Ajusta esto según tus imágenes */
+            object-fit: contain; /* Para que la imagen quepa sin cortarse */
+            margin-bottom: 10px;
+        }
+        .producto h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .producto p {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #555;
+            flex-grow: 1; /* Permite que el párrafo de especificaciones ocupe espacio variable */
+        }
+        .producto button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px; /* Espacio antes del botón */
+        }
+        .producto button:hover {
+            background-color: #218838;
+        }
+        /* Alineación del formulario de filtro */
+        form {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            color: #333;
+        }
 .login-body {
     min-height: 100vh; /* Asegura que el body ocupe todo el alto de la ventana */
     display: flex; /* Habilita Flexbox solo para esta página */
