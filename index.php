@@ -29,6 +29,9 @@ if (isset($_GET['accion'])) {
         $contrasena = $_POST["contrasena"];
         $Controlador->ingresar($correo, $contrasena);
     }
+     elseif ($_GET["accion"] == "login") {
+        $Controlador->verpagina('Vista/html/login.php');
+    }
     if ($_GET["accion"] == "guardarProducto") {
         $marca = $_POST["marca"];
         $modelo = $_POST["modelo"];
@@ -106,30 +109,22 @@ if (isset($_GET['accion'])) {
         $Controlador->eliminarImagenProducto($id_img, $id_producto);
     } elseif ($_GET["accion"] == "dashboard") {
         $Controlador->mostrarDashboard();
-    } else {
-    }
-        if ($_GET["accion"] == "carrito") {
-            $Controlador->mostrarCarrito();
-        }
-        if ($_GET["accion"] == "agregarCarrito") {
+    } elseif ($_GET["accion"] == "carrito") {
+        $Controlador->mostrarCarrito();
+    } elseif ($_GET["accion"] == "agregarCarrito") {
             $Controlador->agregarCarrito();
-        }
-        if ($_GET["accion"] == "finalizarPedido") {
+    } elseif ($_GET["accion"] == "finalizarPedido") {
             $Controlador->finalizarPedido();
-        }
-
-         if ($_GET["accion"] == "pedidoscliente") {
+    } elseif ($_GET["accion"] == "pedidoscliente") {
              $Controlador->mostrarPedidosCliente();
-         }
-          if ($_GET["accion"] == "dashboard") {
+    } elseif ($_GET["accion"] == "dashboard") {
              $Controlador->mostrarDashboard();
          }
         /* else {
         $Controlador->verpagina('Vista/html/error.html');
 
-    }
+              }*/
 } else {
-    header('Location: index.php?accion=catalogo');
-    exit;
+  $Controlador->verpagina('Vista/html/login.php');
 }
 ?>

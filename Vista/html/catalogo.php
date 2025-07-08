@@ -21,8 +21,9 @@
                 <a href="index.php?accion=categorias">Categorías</a>
                 <a href="index.php?accion=pedidos">Pedidos</a>
                 <a href="index.php?accion=dashboard">Dashboard</a>
-                <a href="index.php?accion=catalogo">Catálogo</a>
-                 <a href="index.php?accion=carrito">Ver carrito
+                
+               <?php /*<a href="index.php?accion=catalogo">Catálogo</a>
+                 <a href="index.php?accion=carrito">Ver carrito*/ ?>
 
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)

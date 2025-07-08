@@ -24,25 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Función para mostrar el formulario de registro
 document.addEventListener('DOMContentLoaded', () => {
     const showRegisterLink = document.getElementById('show-register');
     const showLoginLink = document.getElementById('show-login');
     const loginForm = document.querySelector('.login-form');
     const registerForm = document.querySelector('.register-form');
 
-    // Función para mostrar el formulario de registro
     showRegisterLink.addEventListener('click', (e) => {
-        e.preventDefault(); // Previene el comportamiento predeterminado del enlace
-        loginForm.classList.add('hidden'); // Oculta el formulario de login
-        registerForm.classList.remove('hidden'); // Muestra el formulario de registro
+        e.preventDefault(); 
+        loginForm.classList.add('hidden'); 
+        registerForm.classList.remove('hidden'); 
     });
 
-    // Función para mostrar el formulario de login
     showLoginLink.addEventListener('click', (e) => {
-        e.preventDefault(); // Previene el comportamiento predeterminado del enlace
-        registerForm.classList.add('hidden'); // Oculta el formulario de registro
-        loginForm.classList.remove('hidden'); // Muestra el formulario de login
+        e.preventDefault(); 
+        registerForm.classList.add('hidden');
+        loginForm.classList.remove('hidden'); 
     });
+});
+// Función para inicializar las gráficas
 document.addEventListener('DOMContentLoaded', function () {
     // Gráfica de pedidos por mes
     if (typeof pedidosMes !== "undefined" && typeof meses !== "undefined" && document.getElementById('pedidosMes')) {

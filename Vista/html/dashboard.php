@@ -12,7 +12,6 @@
     <header>
         <h1>Tienda de Tenis</h1>
         <nav>
-            <a href="index.php?accion=catalogo">Catálogo</a>
             <a href="index.php?accion=productos">Productos</a>
             <a href="index.php?accion=categorias">Categorías</a>
             <a href="index.php?accion=pedidos">Pedidos</a>

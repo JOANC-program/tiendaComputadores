@@ -12,7 +12,7 @@ class GestorAdmin
         $this->conexion_obj->cerrar();
     }
     
-    public function verificarAdmin($correo, $contrasena)
+   public function verificarAdmin($correo, $contrasena)
     {
         $conexion = new Conexion();
         $conexion->abrir();
@@ -22,14 +22,14 @@ class GestorAdmin
         $usuario = $result->fetch_assoc();
         $conexion->cerrar();
 
-        // Verifica la contraseña hasheada
-        if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
+        // Verifica la contraseña hasheada y el rol admin
+        if ($usuario && password_verify($contrasena, $usuario['contrasena']) && $usuario['rol'] === 'admin') {
             return true;
         }
         return false;
     }
 
-    public function ingresar($correo, $contrasena) {
+     public function ingresar($correo, $contrasena) {
         $mysqli = $this->conexion_obj->getMysqli();
         $stmt = $mysqli->prepare("SELECT id, nombre, correo, contrasena, rol FROM usuarios WHERE correo = ?"); // Asegúrate de seleccionar el 'id'
         $stmt->bind_param("s", $correo);
