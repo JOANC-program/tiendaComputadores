@@ -22,7 +22,9 @@ class GestorCatalogo
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT p.*, c.nombre AS categorias FROM productos p LEFT JOIN categorias c ON p.id_categoria = c.id";
+        $sql = "SELECT p.*, 
+                   (SELECT ruta_imagen FROM imagenes_producto i WHERE i.id_producto = p.id LIMIT 1) AS imagen
+            FROM productos p";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $productos = [];

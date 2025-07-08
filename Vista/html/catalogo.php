@@ -68,14 +68,12 @@
             <?php foreach ($productos as $producto): ?>
                 <div class="producto">
                     <?php if (!empty($producto['imagen'])): ?>
-                        <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
+                        <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
                     <?php endif; ?>
-                    <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
-                    <p>Categoría: <?= htmlspecialchars($producto['categorias']) ?></p>
-                    <p>Talla: <?= htmlspecialchars($producto['descripcion']) ?></p>
+                    <h3><?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?></h3>
+                    <p>Tipo: <?= htmlspecialchars($producto['tipo']) ?></p>
                     <p>$<?= number_format($producto['precio'], 0, ',', '.') ?></p>
-                    <p>Modelo: <?= htmlspecialchars($producto['id_categoria']) ?></p>
-
+                    <p>Especificaciones Tecnicas: <?= htmlspecialchars($producto['especificaciones']) ?></p>
 
                     <form action="index.php?accion=agregarCarrito" method="post" style="margin-bottom: 8px;">
                         <input type="hidden" name="id_producto" value="<?= $producto['id'] ?>">

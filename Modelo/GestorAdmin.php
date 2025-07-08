@@ -227,11 +227,13 @@ class GestorAdmin
     {
         $conexion = new Conexion();
         $conexion->abrir();
-        $sql = "SELECT p.id, u.correo AS usuario, pr.nombre AS producto, p.cantidad, p.fecha, p.estado
-                FROM pedidos p
-                LEFT JOIN usuarios u ON p.id_usuario = u.id
-                LEFT JOIN productos pr ON p.id_producto = pr.id
-                ORDER BY p.fecha DESC";
+        $sql = "SELECT p.id, u.correo AS usuario, 
+               CONCAT(pr.marca, ' ', pr.modelo) AS producto, 
+               p.cantidad, p.fecha, p.estado
+        FROM pedidos p
+        LEFT JOIN usuarios u ON p.id_usuario = u.id
+        LEFT JOIN productos pr ON p.id_producto = pr.id
+        ORDER BY p.fecha DESC";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResult();
         $pedidos = [];
