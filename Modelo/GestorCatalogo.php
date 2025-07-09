@@ -28,12 +28,11 @@ class GestorCatalogo
 
         $sql = "SELECT
                     p.id,
-                    p.nombre AS marca,         
+                    p.marca,         
                     p.modelo,                
                     p.tipo,                    
                     p.precio,
-                    p.especificaciones,        
-                    p.imagen,                  
+                    p.especificaciones,                   
                     p.id_categoria,
                     c.nombre AS nombre_categoria
                 FROM productos p
@@ -52,7 +51,7 @@ class GestorCatalogo
 
         $limit = (int)$limit;
         $offset = (int)$offset;
-        $sql .= " ORDER BY p.nombre ASC LIMIT $limit OFFSET $offset";
+        $sql .= " ORDER BY p.id ASC LIMIT $limit OFFSET $offset";
 
         error_log("SQL listarProductos (con paginación y filtro): " . $sql); // Para depuración
 
@@ -104,12 +103,11 @@ class GestorCatalogo
         $id_sanitized = $mysqli->real_escape_string($id);
 
         $sql = "SELECT p.id,
-                       p.nombre AS marca,
+                       p.marca,
                        p.modelo,
                        p.tipo,
                        p.precio,
                        p.especificaciones,
-                       p.imagen, -- Directamente desde p.imagen
                        p.id_categoria,
                        c.nombre AS nombre_categoria
                 FROM productos p
