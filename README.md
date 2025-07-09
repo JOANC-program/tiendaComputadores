@@ -74,4 +74,6 @@ prueba/
 
 - El sistema implementa 2 roles, admin y cliente.
 
+
+repositorio: https://github.com/JOANC-program/tiendaComputadores.git
 **Desarrollado para fines educativos.**
