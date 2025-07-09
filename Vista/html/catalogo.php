@@ -64,7 +64,7 @@
                             <div class="carousel-inner">
                                 <?php foreach($producto['imagenes'] as $index => $img): ?>
                                     <div class="carousel-item <?= ($index == 0) ? 'active' : '' ?>">
-                                        <img src="Vista/img/<?= htmlspecialchars($img['ruta_imagen']) ?>" class="d-block w-100" alt="...">
+                                        <img src="<?= htmlspecialchars($img['ruta_imagen']) ?>" class="d-block w-100" alt="...">
                                     </div>
                                 <?php endforeach; ?>
                             </div>
