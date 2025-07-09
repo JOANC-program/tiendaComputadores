@@ -64,7 +64,7 @@
                             <div class="carousel-inner">
                                 <?php foreach($producto['imagenes'] as $index => $img): ?>
                                     <div class="carousel-item <?= ($index == 0) ? 'active' : '' ?>">
-                                        <img src="Vista/img/<?= htmlspecialchars($img['ruta_imagen']) ?>" class="d-block w-100" alt="...">
+                                        <img src="<?= htmlspecialchars($img['ruta_imagen']) ?>" class="d-block w-100" alt="...">
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -76,7 +76,7 @@
                             </button>
                         </div>
                     <?php elseif (!empty($producto['imagenes'])): ?>
-                        <img src="Vista/img/<?= htmlspecialchars($producto['imagenes'][0]['ruta_imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
+                        <img src="<?= htmlspecialchars($producto['imagenes'][0]['ruta_imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
                     <?php else: ?>
                         <img src="Vista/img/placeholder.png" alt="Imagen no disponible">
                     <?php endif; ?>
