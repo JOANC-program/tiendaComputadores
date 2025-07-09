@@ -349,4 +349,10 @@ public function mostrarDashboard()
     $masVendidos = $gestor->productosMasVendidos();
     require "Vista/html/dashboard.php";
 }
+public function mostrarCarrucelImagenes ()
+{
+    $gestor = new GestorCatalogo();
+    $imagenes = $gestor->obtenerImagenesProducto();
+    require "Vista/html/acccion=.php";
+}
 }

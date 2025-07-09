@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Catálogo de Productos</title>
     <link rel="stylesheet" href="Vista/css/styles.css">
-    <link rel="stylesheet" href="Vista/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -21,14 +22,14 @@
                 <a href="index.php?accion=categorias">Categorías</a>
                 <a href="index.php?accion=pedidos">Pedidos</a>
                 <a href="index.php?accion=dashboard">Dashboard</a>
-                
-               <?php /*<a href="index.php?accion=catalogo">Catálogo</a>
-                 <a href="index.php?accion=carrito">Ver carrito*/ ?>
 
-                    <?php if (!empty($_SESSION['carrito'])): ?>
-                        (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
-                    <?php endif; ?>
-                 </a>
+                <?php /*<a href="index.php?accion=catalogo">Catálogo</a>
+                <a href="index.php?accion=carrito">Ver carrito*/ ?>
+
+                <?php if (!empty($_SESSION['carrito'])): ?>
+                    (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
+                <?php endif; ?>
+                </a>
 
             <?php endif; ?>
 
@@ -38,7 +39,7 @@
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         (<?= array_sum(array_column($_SESSION['carrito'], 'cantidad')) ?>)
                     <?php endif; ?>
-                 </a>
+                </a>
                 <a href="index.php?accion=pedidoscliente">Pedidos</a>
 
                 <a href="index.php?accion=catalogo">Catálogo</a>
@@ -68,7 +69,8 @@
             <?php foreach ($productos as $producto): ?>
                 <div class="producto">
                     <?php if (!empty($producto['imagen'])): ?>
-                        <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
+                        <img src="<?= htmlspecialchars($producto['imagen']) ?>"
+                            alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
                     <?php endif; ?>
                     <h3><?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?></h3>
                     <p>Tipo: <?= htmlspecialchars($producto['tipo']) ?></p>
@@ -79,7 +81,7 @@
                         <input type="hidden" name="id_producto" value="<?= $producto['id'] ?>">
                         <button type="submit">Agregar al carrito</button>
                     </form>
-                   
+
                 </div>
             <?php endforeach; ?>
         </div>

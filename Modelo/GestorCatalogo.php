@@ -61,5 +61,19 @@ class GestorCatalogo
         $conexion->cerrar();
         return $productos;
     }
+    public function obtenerImagenesProducto($id_producto) {
+        $conexion = new Conexion();
+        $conexion->abrir();
+        $sql = "SELECT ruta_imagen FROM imagenes_producto WHERE id_producto = '$id_producto'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResult();
+        $imagenes = [];
+        while ($row = $result->fetch_assoc()) {
+            $imagenes[] = $row['ruta_imagen'];
+        }
+        $conexion->cerrar();
+        return $imagenes;
+        
+}
 }
 ?>

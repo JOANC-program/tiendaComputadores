@@ -28,8 +28,8 @@ Este proyecto ahora pasa de ser una tienda de tenis a una **tienda de computador
 - Controlar acceso mediante sesiones para la zona admin.
 
 # Paginación y búsqueda
-- Mostrar productos en el catálogo en páginas de 6, 9 o 12 productos.
-- Añadir buscador por nombre o filtro por categoría.
+    - Mostrar productos en el catálogo en páginas de 6, 9 o 12 productos.
+    - Añadir buscador por nombre o filtro por categoría.
 
 # Carrito de compras (simulado)
 - Permitir que el cliente agregue varios productos antes de confirmar el pedido.
