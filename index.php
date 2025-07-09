@@ -114,7 +114,8 @@ if (isset($_GET['accion'])) {
         $Controlador->finalizarPedido();
     } elseif ($_GET["accion"] == "pedidoscliente") {
         $Controlador->mostrarPedidosCliente();
-    } else {
+    } 
+     else {
         $Controlador->verpagina('Vista/html/error.html');
     }
 } else {

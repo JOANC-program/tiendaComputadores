@@ -126,6 +126,22 @@ class GestorCatalogo
         $conexion->cerrar();
         return $producto;
     }
+    public function listarImagenesProducto($id_producto)
+{
+    $conexion = new Conexion();
+    $conexion->abrir();
+    $sql = "SELECT id, ruta_imagen FROM imagenes_producto WHERE id_producto = $id_producto ORDER BY id ASC";
+    $conexion->consulta($sql);
+    $result = $conexion->obtenerResult();
+    $imagenes = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $imagenes[] = $row;
+        }
+    }
+    $conexion->cerrar();
+    return $imagenes;
+}
 
     public function obtenerCategoriaPorId($id) {
         $conexion = new Conexion();
@@ -142,5 +158,6 @@ class GestorCatalogo
         $conexion->cerrar();
         return $categoria;
     }
+  
 }
 ?>

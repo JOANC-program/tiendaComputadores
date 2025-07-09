@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Catálogo de Productos</title>
     <link rel="stylesheet" href="Vista/css/styles.css">
-  
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -58,11 +59,24 @@
         <?php if (!empty($productos)): ?>
             <?php foreach ($productos as $producto): ?>
                 <div class="producto">
-                    <?php
-                    // La modificación se realiza aquí:
-                    if (!empty($producto['imagen'])):
-                    ?>
-                        <img src="Vista/img/<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
+                    <?php if (!empty($producto['imagenes']) && count($producto['imagenes']) > 1): ?>
+                        <div id="carousel<?= htmlspecialchars($producto['id']) ?>" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <?php foreach($producto['imagenes'] as $index => $img): ?>
+                                    <div class="carousel-item <?= ($index == 0) ? 'active' : '' ?>">
+                                        <img src="Vista/img/<?= htmlspecialchars($img['ruta_imagen']) ?>" class="d-block w-100" alt="...">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel<?= htmlspecialchars($producto['id']) ?>" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel<?= htmlspecialchars($producto['id']) ?>" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    <?php elseif (!empty($producto['imagenes'])): ?>
+                        <img src="Vista/img/<?= htmlspecialchars($producto['imagenes'][0]['ruta_imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
                     <?php else: ?>
                         <img src="Vista/img/placeholder.png" alt="Imagen no disponible">
                     <?php endif; ?>
@@ -70,7 +84,6 @@
                     <p>Tipo: <?= htmlspecialchars($producto['tipo']) ?></p>
                     <p>$<?= number_format($producto['precio'], 0, ',', '.') ?></p>
                     <p>Especificaciones Técnicas: <?= htmlspecialchars($producto['especificaciones']) ?></p>
-
                     <form action="index.php?accion=agregarCarrito" method="post" style="margin-bottom: 8px;">
                         <input type="hidden" name="id_producto" value="<?= htmlspecialchars($producto['id']) ?>">
                         <button type="submit">Agregar al carrito</button>
@@ -117,7 +130,6 @@
             }
         }
 
-        // Si hay muchas páginas al final, mostrar puntos suspensivos y la última página
         if ($fin_rango < $total_paginas) {
             if ($fin_rango < $total_paginas - 1) { // Mostrar puntos suspensivos si no es la penúltima página
                 echo '<span class="disabled">...</span>';
@@ -132,6 +144,7 @@
             echo '<span class="disabled">Siguiente</span>';
         }
         ?>
+        
     </div>
 </body>
 </html>

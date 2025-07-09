@@ -270,27 +270,28 @@ public function guardarCliente($nombre, $correo, $contrasena)
 }
 public function mostrarCatalogo()
 {
-      $gestor= new GestorCatalogo();
-        $productos_por_pagina = 6; // Puedes ajustar este número
-        $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-        if ($pagina_actual < 1) {
-            $pagina_actual = 1;
-        }
-        $offset = ($pagina_actual - 1) * $productos_por_pagina;
+    $gestor = new GestorCatalogo();
+    $productos_por_pagina = 6;
+    $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+    if ($pagina_actual < 1) $pagina_actual = 1;
+    $offset = ($pagina_actual - 1) * $productos_por_pagina;
 
-        $filtro_categoria = isset($_GET['filtro_categoria']) && $_GET['filtro_categoria'] !== '' ? (int)$_GET['filtro_categoria'] : null;
+    $filtro_categoria = isset($_GET['filtro_categoria']) && $_GET['filtro_categoria'] !== '' ? (int)$_GET['filtro_categoria'] : null;
 
-        $total_productos = $gestor->contarTotalProductos($filtro_categoria);
-        $total_paginas = ceil($total_productos / $productos_por_pagina);
+    $total_productos = $gestor->contarTotalProductos($filtro_categoria);
+    $total_paginas = ceil($total_productos / $productos_por_pagina);
 
-        $productos = $gestor->listarProductos(
-            $productos_por_pagina,
-            $offset,
-            $filtro_categoria
-        );
-        $categorias = $gestor->listarCategorias();
+    $productos = $gestor->listarProductos($productos_por_pagina, $offset, $filtro_categoria);
 
-        require_once 'Vista/html/catalogo.php';
+    // AQUÍ: para cada producto, agrega sus imágenes
+    foreach ($productos as &$producto) {
+        $producto['imagenes'] = $gestor->listarImagenesProducto($producto['id']);
+    }
+    unset($producto);
+
+    $categorias = $gestor->listarCategorias();
+
+    require_once 'Vista/html/catalogo.php';
 }
 public function cambiarEstadoPedido($id_pedido, $estado)
 {
