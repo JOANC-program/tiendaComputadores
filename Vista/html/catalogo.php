@@ -76,7 +76,7 @@
                             </button>
                         </div>
                     <?php elseif (!empty($producto['imagenes'])): ?>
-                        <img src="Vista/img/<?= htmlspecialchars($producto['imagenes'][0]['ruta_imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
+                        <img src="<?= htmlspecialchars($producto['imagenes'][0]['ruta_imagen']) ?>" alt="<?= htmlspecialchars($producto['marca'] . ' ' . $producto['modelo']) ?>">
                     <?php else: ?>
                         <img src="Vista/img/placeholder.png" alt="Imagen no disponible">
                     <?php endif; ?>
